@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Подписка</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+    :root {
+      --page-width: 872px;
+      --stage-width: 100%;
+      --stage-height: 730px;
+      --side-width: 320px;
+      --surface: #1a0b17;
+      --surface-dark: #150412;
+      --surface-card: #230b1e;
+      --surface-card-soft: #2a1026;
+      --line: #342425;
+      --text: #ffffff;
+      --muted: #bdaeb4;
+      --accent: #ed6c7b;
+      --accent-strong: #bd2c43;
+      --gold: #deb673;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { min-width: var(--stage-width); min-height: 100%; margin: 0; }
+
+    body {
+      background: var(--surface-dark);
+      color: var(--text);
+      font-family: "Inter", Arial, sans-serif;
+      font-size: 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    .stage {
+      position: relative;
+      width: var(--stage-width);
+      min-height: var(--stage-height);
+      margin: 0 auto;
+      background:
+        linear-gradient(90deg, transparent 0 var(--side-width), rgba(21,4,18,0.98) var(--side-width) calc(100% - var(--side-width)), transparent calc(100% - var(--side-width))),
+        var(--surface-dark);
+      overflow: hidden;
+    }
+    .stage::before, .stage::after {
+      content: "";
+      position: absolute;
+      left: var(--side-width);
+      width: calc(100% - var(--side-width) * 2);
+      height: 1px;
+      background: rgba(63,45,47,0.65);
+      z-index: 1;
+    }
+    .stage::before { top: 0; }
+    .stage::after  { bottom: 0; }
+
+    .side-panel {
+      position: absolute; top: 0;
+      width: var(--side-width); height: 100%;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #632428 0%, #160e28 100%);
+      z-index: 0;
+    }
+    .side-panel-left  { left: 0; }
+    .side-panel-right { right: 0; }
+
+    .lantern-field { position: absolute; }
+
+    .page {
+      position: relative; z-index: 1;
+      width: var(--page-width); margin: 0 auto; padding: 12px 0;
+      display: flex; flex-direction: column;
+      min-height: calc(100vh - 24px);
+    }
+
+    /* ── header ── */
+    .site-header {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1A0B17;
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      height: 102px;
+      overflow: hidden;
+    }
+    .logo-link { display: grid; place-items: center; border-right: 1px solid var(--line); }
+    .logo { width: 84px; height: 84px; display: block; border-radius: 50%; }
+    .header-content { padding: 9px 10px 0; }
+
+    /* ── search ── */
+    .search-form { display: grid; grid-template-columns: 1fr 138px; gap: 10px; align-items: center; }
+    .search-input-wrap { position: relative; }
+    .search-input-wrap input { padding-right: 38px; }
+    .search-clear-btn {
+      position: absolute; right: 10px; top: 45%;
+      transform: translateY(-50%);
+      display: grid; place-items: center;
+      width: 20px; height: 20px;
+      border: none; border-radius: 50%;
+      background: transparent; color: #b68f98;
+      font-size: 18px; line-height: 1;
+      cursor: pointer; padding: 0;
+    }
+    .search-form input, .search-submit-btn { height: 32px; border-radius: 10px; }
+    .search-form input {
+      width: 100%;
+      border: 1px solid #9b6973;
+      background: transparent; color: var(--text);
+      outline: none; padding: 0 12px;
+    }
+    .search-form input::placeholder { color: #807078; }
+    .search-submit-btn {
+      border: 1px solid #923044;
+      background: #40121e; color: var(--text);
+      font-weight: 700; cursor: pointer;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+    .search-submit-btn:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(146,48,68,0.45);
+      transform: translateZ(0) scale(1.03);
+    }
+
+    /* ── nav ── */
+    .main-nav { display: flex; align-items: center; gap: 31px; margin-top: 15px; color: #c8b5bd; font-size: 12px; font-weight: 700; }
+    .main-nav a { display: inline-grid; place-items: center; min-width: 86px; height: 34px; border-radius: 20px; padding: 0 12px; }
+    .main-nav a:hover, .main-nav .active { color: var(--text); background: rgba(62,37,36,0.7); }
+
+    /* ── content ── */
+    .content-wrap {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1A0B17;
+      margin-top: 11px;
+      padding: 23px 21px 20px;
+    }
+    .section-label { margin: 0 0 10px; color: var(--accent); font-weight: 800; text-transform: lowercase; font-size: 14px; }
+    .content-wrap h1 { margin: 0 0 6px; font-size: 24px; font-weight: 700; }
+    .content-wrap .desc { margin: 0 0 20px; color: var(--muted); font-size: 13px; }
+
+    /* ── plans ── */
+    .plans-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+    .plan-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #210f1e;
+      padding: 15px 9px 11px;
+      display: flex; flex-direction: column;
+    }
+    .plan-name { font-size: 14px; font-weight: 600; color: var(--text); margin: 0 0 8px; }
+    .plan-price { font-size: 24px; font-weight: 700; color: var(--text); margin: 0 0 14px; }
+    .plan-features {
+      list-style: disc; padding-left: 16px; margin: 0 0 16px;
+      display: flex; flex-direction: column; gap: 5px;
+      color: var(--muted); font-size: 12px; flex: 1;
+    }
+
+    .plan-btn {
+      width: 100%; height: 36px; border-radius: 10px;
+      border: 1px solid #b7384e;
+      background: var(--accent-strong);
+      color: #fff; font-weight: 700; font-size: 12px;
+      cursor: pointer; text-align: center; line-height: 36px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+      transition: filter 0.2s, box-shadow 0.2s;
+      display: block;
+    }
+    .plan-btn:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(146,48,68,0.45);
+      transform: translateZ(0) scale(1.03);
+    }
+
+    /* ── faq ── */
+    .faq-wrap {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1a0b17;
+      margin-top: 11px;
+      padding: 18px 21px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .faq-item { border: 1px solid var(--line); border-radius: 10px; background: #210f1e; padding: 10px 14px; }
+    .faq-q { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+    .faq-a { color: var(--muted); font-size: 12px; }
+
+    /* ── footer ── */
+    .site-footer {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1A0B17;
+      height: 158px; margin-top: auto; padding: 16px 21px;
+    }
+    .site-footer h2 { margin-top: 0; font-size: 24px; font-weight: 800; line-height: 1.1; }
+    .site-footer address { margin: -15px 0 0; color: var(--muted); font-style: normal; font-size: 14px; line-height: 1.18; }
+    .site-footer p { margin: 13px 0 0; color: var(--muted); font-size: 12px; }
+
+    /* ── modal overlay ── */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: #210F1E;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      width: 460px;
+      padding: 28px 28px 24px;
+      display: flex; flex-direction: column; gap: 10px;
+      position: relative;
+    }
+    .modal-box-success {
+      align-items: center; text-align: center;
+      padding: 48px 40px 36px; gap: 24px;
+    }
+    .modal-title { margin: 0 0 6px; font-size: 20px; font-weight: 700; }
+
+    .modal-field { display: flex; flex-direction: column; gap: 4px; }
+    .modal-label { font-size: 13px; color: var(--text); }
+    .modal-input {
+      width: 100%; height: 40px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #291325; color: var(--text);
+      padding: 0 12px; font-size: 13px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .modal-input::placeholder { color: #635F62; }
+    .modal-input.error { border-color: var(--accent); }
+    .field-error { font-size: 11px; color: var(--accent); min-height: 14px; }
+
+    .modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+
+    .modal-btn-cancel {
+      height: 38px; padding: 0 22px; border-radius: 10px;
+      border: 1px solid var(--line); background: #291325;
+      color: var(--text); font-weight: 700; font-size: 14px;
+      cursor: pointer;
+      backface-visibility: hidden; transform: translateZ(0);
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+    .modal-btn-cancel:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 0 0 1px rgba(52,36,37,0.8);
+      transform: translateZ(0) scale(1.03);
+    }
+    .modal-btn-pay {
+      height: 38px; padding: 0 22px; border-radius: 10px;
+      border: 1px solid #bd2b42; background: var(--accent-strong);
+      color: #fff; font-weight: 700; font-size: 14px;
+      cursor: pointer;
+      backface-visibility: hidden; transform: translateZ(0);
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+    .modal-btn-pay:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(146,48,68,0.45);
+      transform: translateZ(0) scale(1.03);
+    }
+
+    .modal-success-text { margin: 0; font-size: 20px; font-weight: 700; }
+    .modal-close {
+      position: absolute; top: 12px; right: 16px;
+      font-size: 22px; color: var(--text); line-height: 1;
+      cursor: pointer; background: none; border: none; padding: 0;
+    }
+    .modal-go-cabinet {
+      height: 38px; padding: 0 22px; border-radius: 10px;
+      border: 1px solid #bd2b42; background: var(--accent-strong);
+      color: #fff; font-weight: 700; font-size: 14px;
+      cursor: pointer; text-decoration: none;
+      display: grid; place-items: center;
+      backface-visibility: hidden; transform: translateZ(0);
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+    .modal-go-cabinet:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(146,48,68,0.45);
+      transform: translateZ(0) scale(1.03);
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <aside class="side-panel side-panel-left" aria-hidden="true"></aside>
+    <aside class="side-panel side-panel-right" aria-hidden="true"></aside>
+    <div class="lantern-field" aria-hidden="true">
+      <img class="light-1-icon" alt="" src="image/light.png">
+    </div>
+
+    <main class="page">
+      <header class="site-header">
+        <a class="logo-link" href="index.html"><img class="logo" src="image/logo.png" alt="Doramaflix"></a>
+        <div class="header-content">
+          <form class="search-form">
+            <div class="search-input-wrap">
+              <input placeholder="Найти дораму, жанр или студию" autocomplete="off">
+              <button type="button" class="search-clear-btn" aria-label="Очистить поиск">×</button>
+            </div>
+            <button type="button" class="search-submit-btn">Найти</button>
+          </form>
+          <nav class="main-nav">
+            <a href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a class="active" href="subcribe.html">Подписка</a>
+            <a href="cabinet.html">Личный кабинет</a>
+          </nav>
+        </div>
+      </header>
+
+      <section class="content-wrap">
+        <p class="section-label">premium</p>
+        <h1>Оформление подписки</h1>
+        <p class="desc">Откройте доступ ко всем эпизодам, расписанию и расширенному плееру.</p>
+
+        <div class="plans-grid">
+          <div class="plan-card">
+            <div class="plan-name">Пробная неделя</div>
+            <div class="plan-price">1 ₽</div>
+            <ul class="plan-features">
+              <li>7 дней</li>
+              <li>Полный каталог</li>
+              <li>Без рекламы</li>
+            </ul>
+            <button class="plan-btn open-pay-modal">Оформить</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-name">1 месяц</div>
+            <div class="plan-price">399 ₽</div>
+            <ul class="plan-features">
+              <li>30 дней</li>
+              <li>Доступ к новым сериям</li>
+              <li>HD и Full HD</li>
+            </ul>
+            <button class="plan-btn open-pay-modal">Оформить</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-name">3 месяца</div>
+            <div class="plan-price">999 ₽</div>
+            <ul class="plan-features">
+              <li>90 дней</li>
+              <li>Выгодная цена</li>
+              <li>Приоритет к новинкам</li>
+            </ul>
+            <button class="plan-btn open-pay-modal">Оформить</button>
+          </div>
+          <div class="plan-card">
+            <div class="plan-name">1 год</div>
+            <div class="plan-price">3490 ₽</div>
+            <ul class="plan-features">
+              <li>365 дней</li>
+              <li>Максимальная выгода</li>
+              <li>Полный Premium-пакет</li>
+            </ul>
+            <button class="plan-btn open-pay-modal">Оформить</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="faq-wrap">
+        <p class="section-label" style="margin:0 0 4px;">частые вопросы</p>
+        <div class="faq-item">
+          <div class="faq-q">Можно ли отменить подписку?</div>
+          <div class="faq-a">Да, в любой момент через личный кабинет. Деньги за неиспользованный период не возвращаются.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">На скольких устройствах можно смотреть?</div>
+          <div class="faq-a">Подписка действует на одном устройстве одновременно.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Есть ли реклама в Premium?</div>
+          <div class="faq-a">Нет, все тарифы включают просмотр без рекламы.</div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <h2>Контакты</h2>
+        <address>ИП Толстоброва А.А.<br>Иркутск, ул. Красноярская, д. 37, оф. 2<br>Телефон: (6767) 11-03-77<br>E-mail: Doramaflix@mail.ru</address>
+        <p>© 2026 Doramaflix.ru. Все права защищены.</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Модальное окно оплаты -->
+  <div class="modal-overlay" id="modal-pay">
+    <div class="modal-box">
+      <button class="modal-close" id="close-pay">×</button>
+      <h2 class="modal-title">Оплата подписки</h2>
+
+      <div class="modal-field">
+        <label class="modal-label">Имя владельца карты</label>
+        <input class="modal-input" id="card-name" placeholder="Введите имя владельца карты" maxlength="60" autocomplete="off">
+        <span class="field-error" id="err-name"></span>
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-label">Номер карты (16 цифр)</label>
+        <input class="modal-input" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19" autocomplete="off" inputmode="numeric">
+        <span class="field-error" id="err-number"></span>
+      </div>
+
+      <div class="modal-row">
+        <div class="modal-field">
+          <label class="modal-label">Срок действия (ММ/ГГ)</label>
+          <input class="modal-input" id="card-expiry" placeholder="ММ/ГГ" maxlength="5" autocomplete="off" inputmode="numeric">
+          <span class="field-error" id="err-expiry"></span>
+        </div>
+        <div class="modal-field">
+          <label class="modal-label">CVV (3 цифры)</label>
+          <input class="modal-input" id="card-cvv" placeholder="•••" maxlength="3" autocomplete="off" inputmode="numeric" type="password">
+          <span class="field-error" id="err-cvv"></span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="modal-btn-cancel" id="cancel-pay">Отмена</button>
+        <button class="modal-btn-pay" id="submit-pay">Оплатить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Модальное окно успеха -->
+  <div class="modal-overlay" id="modal-success">
+    <div class="modal-box modal-box-success">
+      <button class="modal-close" id="close-success">×</button>
+      <p class="modal-success-text">Подписка успешно оформлена!</p>
+      <a href="cabinet.html" class="modal-go-cabinet">Перейти в личный кабинет</a>
+    </div>
+  </div>
+
+  <script>
+  /* ── DRAMAS ── */
+  const DRAMAS = [
+    { title: "Девять пазлов",              url: "nine-puzzles.html" },
+    { title: "Легкая улыбка покоряет мир", url: "love-O2O.html" },
+    { title: "Обстоятельства смерти",      url: "manner-of-death.html" },
+    { title: "Истинная красота",           url: "true-beauty.html" },
+    { title: "Прачечная Минато",           url: "minato's-laundromat.html" },
+    { title: "Далекие странники",          url: "word-of-honor.html" },
+    { title: "Моя романтическая афера",    url: "my-romance-scammer.html" },
+    { title: "Любовь приходит с неба",     url: "crash-landing-on-you.html" },
+    { title: "Отсчёт до Да",               url: "countdown-to-yes.html" },
+    { title: "Неукротимый",                url: "the-untamed.html" },
+    { title: "Сказка о 1000 звёзд",        url: "a-tale-of-1000-stars.html" },
+    { title: "Оказывается, можно...",      url: "cherry-magic.html" },
+  ];
+
+  /* ── search ── */
+  setupSearch(
+    document.querySelector('.search-form input'),
+    document.querySelector('.search-submit-btn'),
+    document.querySelector('.search-clear-btn')
+  );
+
+  function setupSearch(input, submitBtn, clearBtn) {
+    const dropdown = document.createElement('ul');
+    dropdown.style.cssText = `
+      position:fixed; z-index:9999;
+      list-style:none; margin:0; padding:4px 0;
+      background:#1e0d1b; border:1px solid #9b6973;
+      border-top:none; border-radius:0 0 10px 10px;
+      display:none; box-shadow:0 8px 20px rgba(0,0,0,0.6);
+    `;
+    document.body.appendChild(dropdown);
+
+    function toggleClear() {
+      if (clearBtn) clearBtn.style.display = input.value.trim() ? 'grid' : 'none';
+    }
+    function pos() {
+      const r = input.getBoundingClientRect();
+      dropdown.style.top = r.bottom + 'px';
+      dropdown.style.left = r.left + 'px';
+      dropdown.style.width = r.width + 'px';
+    }
+    function open() { input.style.borderRadius = '10px 10px 0 0'; input.style.borderBottom = '1px solid transparent'; }
+    function close() { dropdown.style.display = 'none'; input.style.borderRadius = '10px'; input.style.borderBottom = ''; }
+
+    function render(query) {
+      const q = query.trim().toLowerCase();
+      dropdown.innerHTML = '';
+      if (!q) { close(); return; }
+      const matches = DRAMAS.filter(d => d.title.toLowerCase().includes(q));
+      if (!matches.length) { close(); return; }
+      matches.forEach(d => {
+        const li = document.createElement('li');
+        li.textContent = d.title;
+        li.style.cssText = 'padding:9px 12px;font-size:13px;cursor:pointer;color:#fff;transition:background 0.15s;';
+        li.addEventListener('mouseenter', () => li.style.background = 'rgba(62,37,36,0.8)');
+        li.addEventListener('mouseleave', () => li.style.background = 'transparent');
+        li.addEventListener('mousedown',  () => { input.value = d.title; toggleClear(); close(); });
+        dropdown.appendChild(li);
+      });
+      pos(); open();
+      dropdown.style.display = 'block';
+    }
+
+    input.addEventListener('input', () => { render(input.value); toggleClear(); });
+    input.addEventListener('focus', () => render(input.value));
+    input.addEventListener('blur',  () => setTimeout(close, 150));
+    window.addEventListener('scroll', () => { if (dropdown.style.display !== 'none') pos(); });
+    window.addEventListener('resize', () => { if (dropdown.style.display !== 'none') pos(); });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('mousedown', e => {
+        e.preventDefault();
+        input.value = ''; toggleClear(); close(); input.focus();
+      });
+      toggleClear();
+    }
+
+    function go() {
+      const q = input.value.trim().toLowerCase();
+      if (!q) return;
+      const t = DRAMAS.find(d => d.title.toLowerCase() === q) || DRAMAS.find(d => d.title.toLowerCase().includes(q));
+      if (t) window.location.href = t.url;
+    }
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    if (submitBtn) submitBtn.addEventListener('click', go);
+  }
+
+  /* ── modal ── */
+  const modalPay     = document.getElementById('modal-pay');
+  const modalSuccess = document.getElementById('modal-success');
+
+  function openModal(el)  { el.classList.add('open'); }
+  function closeModal(el) { el.classList.remove('open'); }
+
+  // Открыть форму оплаты
+  document.querySelectorAll('.open-pay-modal').forEach(btn => {
+    btn.addEventListener('click', () => { resetForm(); openModal(modalPay); });
+  });
+
+  // Закрыть форму оплаты
+  document.getElementById('close-pay').addEventListener('click',  () => closeModal(modalPay));
+  document.getElementById('cancel-pay').addEventListener('click', () => closeModal(modalPay));
+  modalPay.addEventListener('click', e => { if (e.target === modalPay) closeModal(modalPay); });
+
+  // Закрыть успех
+  document.getElementById('close-success').addEventListener('click', () => closeModal(modalSuccess));
+  modalSuccess.addEventListener('click', e => { if (e.target === modalSuccess) closeModal(modalSuccess); });
+
+  /* ── input formatting ── */
+  const cardNumber = document.getElementById('card-number');
+  const cardExpiry = document.getElementById('card-expiry');
+  const cardCvv    = document.getElementById('card-cvv');
+  const cardName   = document.getElementById('card-name');
+
+  // Номер карты: только цифры, формат 0000 0000 0000 0000
+  cardNumber.addEventListener('input', () => {
+    let v = cardNumber.value.replace(/\D/g, '').slice(0, 16);
+    cardNumber.value = v.replace(/(.{4})/g, '$1 ').trim();
+  });
+
+  // Срок: только цифры, формат ММ/ГГ
+  cardExpiry.addEventListener('input', () => {
+    let v = cardExpiry.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length >= 3) v = v.slice(0, 2) + '/' + v.slice(2);
+    cardExpiry.value = v;
+  });
+
+  // CVV: только цифры, 3 знака
+  cardCvv.addEventListener('input', () => {
+    cardCvv.value = cardCvv.value.replace(/\D/g, '').slice(0, 3);
+  });
+
+  /* ── validation ── */
+  function setError(inputEl, errEl, msg) {
+    errEl.textContent = msg;
+    if (msg) inputEl.classList.add('error');
+    else     inputEl.classList.remove('error');
+  }
+
+  function validateForm() {
+    let ok = true;
+
+    const name = cardName.value.trim();
+    const errName = document.getElementById('err-name');
+    if (!name) {
+      setError(cardName, errName, 'Введите имя владельца карты'); ok = false;
+    } else if (!/^[A-Za-zА-Яа-яЁё\s'-]+$/.test(name)) {
+      setError(cardName, errName, 'Имя должно содержать только буквы'); ok = false;
+    } else {
+      setError(cardName, errName, '');
+    }
+
+    const num = cardNumber.value.replace(/\s/g, '');
+    const errNum = document.getElementById('err-number');
+    if (num.length !== 16) {
+      setError(cardNumber, errNum, 'Введите 16 цифр номера карты'); ok = false;
+    } else {
+      setError(cardNumber, errNum, '');
+    }
+
+    const exp = cardExpiry.value;
+    const errExp = document.getElementById('err-expiry');
+    const expMatch = exp.match(/^(\d{2})\/(\d{2})$/);
+    if (!expMatch) {
+      setError(cardExpiry, errExp, 'Формат: ММ/ГГ'); ok = false;
+    } else {
+      const mm = parseInt(expMatch[1], 10);
+      const yy = parseInt(expMatch[2], 10);
+      const now = new Date();
+      const curYY = now.getFullYear() % 100;
+      const curMM = now.getMonth() + 1;
+      if (mm < 1 || mm > 12) {
+        setError(cardExpiry, errExp, 'Месяц от 01 до 12'); ok = false;
+      } else if (yy < curYY || (yy === curYY && mm < curMM)) {
+        setError(cardExpiry, errExp, 'Срок действия карты истёк'); ok = false;
+      } else {
+        setError(cardExpiry, errExp, '');
+      }
+    }
+
+    const cvv = cardCvv.value;
+    const errCvv = document.getElementById('err-cvv');
+    if (cvv.length !== 3) {
+      setError(cardCvv, errCvv, 'CVV — 3 цифры на обороте карты'); ok = false;
+    } else {
+      setError(cardCvv, errCvv, '');
+    }
+
+    return ok;
+  }
+
+  // Сброс ошибок при вводе
+  [cardName, cardNumber, cardExpiry, cardCvv].forEach(inp => {
+    inp.addEventListener('input', () => {
+      inp.classList.remove('error');
+      const errId = { 'card-name': 'err-name', 'card-number': 'err-number', 'card-expiry': 'err-expiry', 'card-cvv': 'err-cvv' }[inp.id];
+      if (errId) document.getElementById(errId).textContent = '';
+    });
+  });
+
+  document.getElementById('submit-pay').addEventListener('click', () => {
+    if (validateForm()) {
+      closeModal(modalPay);
+      openModal(modalSuccess);
+    }
+  });
+
+  function resetForm() {
+    [cardName, cardNumber, cardExpiry, cardCvv].forEach(inp => {
+      inp.value = '';
+      inp.classList.remove('error');
+    });
+    ['err-name', 'err-number', 'err-expiry', 'err-cvv'].forEach(id => {
+      document.getElementById(id).textContent = '';
+    });
+  }
+  </script>
+</body>
+</html>

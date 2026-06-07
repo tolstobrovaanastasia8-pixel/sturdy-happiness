@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Главная страница</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+    :root {
+      --stage-width: 100%;
+      --stage-height: 2031px;
+      --side-width: 320px;
+      --surface: #1a0b17;
+      --surface-dark: #150412;
+      --surface-card: #230b1e;
+      --surface-card-soft: #2a1026;
+      --line: #342425;
+      --text: #ffffff;
+      --muted: #bdaeb4;
+      --accent: #ed6c7b;
+      --accent-strong: #bd2c43;
+      --gold: #deb673;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      min-width: var(--stage-width);
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background: var(--surface-dark);
+      color: var(--text);
+      font-family: "Inter", Arial, sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar { width: 0; height: 0; }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    .stage {
+      position: relative;
+      width: var(--stage-width);
+      min-height: var(--stage-height);
+      margin: 0 auto;
+      background:
+        linear-gradient(90deg,
+          transparent 0 var(--side-width),
+          rgba(21, 4, 18, 0.98) var(--side-width) calc(100% - var(--side-width)),
+          transparent calc(100% - var(--side-width))),
+        var(--surface-dark);
+      overflow: hidden;
+    }
+
+    .stage::before,
+    .stage::after {
+      content: "";
+      position: absolute;
+      left: var(--side-width);
+      width: calc(100% - var(--side-width) * 2);
+      height: 1px;
+      background: rgba(63, 45, 47, 0.65);
+      z-index: 1;
+    }
+
+    .stage::before { top: 0; }
+    .stage::after  { bottom: 0; }
+
+    .side-panel {
+      position: absolute;
+      top: 0;
+      width: var(--side-width);
+      height: 100%;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #632428 0%, #160e28 100%);
+      z-index: 0;
+    }
+
+    .side-panel-left  { left: 0; }
+    .side-panel-right { right: 0; }
+
+    .lantern-field { position: absolute; }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      width: 872px;
+      margin: 0 auto;
+      padding: 12px 0;
+    }
+
+    /* ── shared card/section shell ─────────────────────────── */
+    .site-header,
+    .hero,
+    .content-section,
+    .plans-section,
+    .site-footer {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1A0B17;
+    }
+
+    /* ── header ────────────────────────────────────────────── */
+    .site-header {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      height: 102px;
+      overflow: hidden;
+    }
+
+    .logo-link { display: grid; place-items: center; border-right: 1px solid var(--line); }
+    .logo { width: 84px; height: 84px; display: block; border-radius: 50%; }
+    .header-content { padding: 9px 10px 0; }
+
+    .search-form { display: grid; grid-template-columns: 1fr 138px; gap: 10px; align-items: center; }
+
+    .search-input-wrap { position: relative; }
+    .search-input-wrap input { padding-right: 38px; }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 10px;
+      top: 45%;
+      transform: translateY(-50%);
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: #b68f98;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .search-form input,
+    .search-submit-btn { height: 32px; border-radius: 10px; }
+
+    .search-form input {
+      width: 100%;
+      border: 1px solid #9b6973;
+      background: transparent;
+      color: var(--text);
+      outline: none;
+      padding: 0 12px;
+    }
+    .search-form input::placeholder { color: #807078; }
+
+    .search-submit-btn {
+      border: 1px solid #923044;
+      background: #40121e;
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+    .search-submit-btn:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(146, 48, 68, 0.45);
+    }
+
+    /* ── nav ────────────────────────────────────────────────── */
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 31px;
+      margin-top: 15px;
+      color: #c8b5bd;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .main-nav a {
+      display: inline-grid;
+      place-items: center;
+      min-width: 86px;
+      height: 34px;
+      border-radius: 20px;
+      padding: 0 12px;
+    }
+
+    .main-nav a:hover,
+    .main-nav .active { color: var(--text); background: rgba(62, 37, 36, 0.7); }
+
+    /* ── hero ───────────────────────────────────────────────── */
+    .hero { position: relative; height: 254px; margin-top: 11px; overflow: hidden; }
+
+    .hero-backdrop {
+      position: absolute;
+      inset: -24px -8px;
+      width: calc(100% + 16px);
+      height: calc(100% + 56px);
+      object-fit: cover;
+      opacity: 0.36;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(21, 4, 18, 0.08), rgba(21, 4, 18, 0.5) 78%),
+        linear-gradient(180deg, rgba(21, 4, 18, 0.06), rgba(21, 4, 18, 0.55));
+    }
+
+    .hero-copy,
+    .hero-stats { position: relative; z-index: 1; }
+
+    .hero-copy { width: 568px; padding: 20px 0 0 21px; }
+
+    .section-label { margin: 0; color: var(--accent); font-size: 14px; font-weight: 800; line-height: 1.2; }
+    .hero h1 { margin: 13px 0 8px; font-size: 26px; line-height: 1.1; font-weight: 800; }
+    .hero-description { margin: 0; width: 510px; color: var(--text); font-size: 14px; line-height: 1.12; }
+    .hero-actions { display: flex; gap: 15px; margin-top: 14px; }
+
+    /* ── shared button ──────────────────────────────────────── */
+    .button {
+      display: inline-grid;
+      place-items: center;
+      height: 32px;
+      border-radius: 20px;
+      border: 1px solid #bd2b42;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .button-primary {
+      width: 144px;
+      background: var(--accent-strong);
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+    .button-primary:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(189, 43, 66, 0.45);
+    }
+
+    .button-secondary {
+      width: 186px;
+      background: rgba(56, 15, 35, 0.85);
+      transition: filter 0.2s, box-shadow 0.2s, background-image 0s, color 0s;
+    }
+    .button-secondary:hover {
+      background-color: #ffffff;
+      border-color: #631F25;
+      background-image: url(image/cubs.png);
+      background-size: 80px;
+      background-repeat: no-repeat;
+      background-position: center;
+      color: transparent;
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(99, 31, 37, 0.35);
+    }
+
+    /* ── hero stats ─────────────────────────────────────────── */
+    .hero-stats {
+      position: absolute;
+      right: 43px;
+      top: 72px;
+      width: 224px;
+      height: 117px;
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(21, 4, 18, 0.92);
+      overflow: hidden;
+    }
+
+    .hero-stats div { display: grid; grid-template-columns: 1fr auto; align-items: center; height: 39px; padding: 0 10px; }
+    .hero-stats div + div { border-top: 1px solid var(--line); }
+    .hero-stats dt,
+    .hero-stats dd { margin: 0; font-size: 12px; }
+    .hero-stats dd { font-weight: 800; }
+
+    /* ── content section ────────────────────────────────────── */
+    .content-section { height: 575px; margin-top: 11px; padding: 18px 21px; }
+
+    .content-section h2,
+    .plans-section h2,
+    .site-footer h2 { margin: 14px 0 0; font-size: 26px; line-height: 1.1; font-weight: 800; }
+
+    .show-grid { display: flex; gap: 34.2px; margin-top: 19px; }
+
+    /* ── show card ──────────────────────────────────────────── */
+    .show-card {
+      position: relative;
+      width: 253.5px;
+      height: 461px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface-card);
+      overflow: hidden;
+    }
+
+    .poster-frame {
+      position: relative;
+      height: 354px;
+      border-bottom: 1px solid var(--line);
+      border-radius: 10px 10px 0 0;
+      overflow: hidden;
+    }
+
+    .poster { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .image-position-top,
+    .image-position-puzzle { object-position: center top; }
+    .image-position-high   { object-position: center 31%; }
+    .image-position-sky    { object-position: center 4%; }
+    .image-position-date   { object-position: center 28%; }
+    .image-position-romance{ object-position: center center; }
+
+    .card-copy { position: relative; height: 107px; padding: 6px 8px 8px; }
+    .card-copy h3 { margin: 0 0 4px; min-height: 14px; font-size: 12px; line-height: 1.1; font-weight: 500; }
+    .card-copy p  { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.2; }
+
+    .episode-badge {
+      position: absolute;
+      left: 8px;
+      top: 43px;
+      height: 12px;
+      min-width: 51px;
+      padding: 0 7px;
+      border: 1px solid var(--gold);
+      border-radius: 20px;
+      color: var(--gold);
+      font-size: 9px;
+      line-height: 10px;
+      background: #3C282B;
+    }
+
+    .country { position: absolute; right: 11px; top: 43px; color: var(--muted); font-size: 10px; line-height: 1.2; }
+
+    .details-link { position: absolute; left: 8px; right: 8px; bottom: 8px; display: grid; place-items: center; height: 36px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-card-soft); font-size: 12px; font-weight: 800; transition: filter 0.2s, box-shadow 0.2s; backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(0); }
+    .details-link:hover { filter: brightness(1.2); box-shadow: 0 0 0 1px rgba(52, 36, 37, 0.8); transform: translateZ(0) scale(1.03); }
+
+    /* ── plans ──────────────────────────────────────────────── */
+    .plans-section { height: 286px; margin-top: 11px; padding: 20px 21px; }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 189px);
+      gap: 24px;
+      margin-top: 18px;
+    }
+
+    .plan-card {
+      position: relative;
+      height: 175px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(37, 13, 31, 0.92);
+      padding: 13px 10px;
+    }
+
+    .plan-card h3 { margin: 0; font-size: 16px; line-height: 1.2; font-weight: 800; }
+    .plan-card strong { display: block; margin-top: 18px; font-size: 28px; line-height: 1; }
+    .plan-card ul { margin: 10px 0 0 14px; padding: 0; color: var(--muted); font-size: 12px; line-height: 1.28; }
+
+    .plan-button {
+      position: absolute;
+      left: 18px; right: 14px; bottom: 9px;
+      display: grid;
+      place-items: center;
+      height: 35px;
+      border: 1px solid #bd2b42;
+      border-radius: 8px;
+      background: var(--accent-strong);
+      font-size: 12px;
+      font-weight: 800;
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+    .plan-button:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(189, 43, 66, 0.45);
+    }
+
+    /* ── footer ─────────────────────────────────────────────── */
+    .site-footer { height: 158px; margin-top: 13px; padding: 16px 21px; }
+    .site-footer h2 { margin-top: 0; font-size: 24px; font-weight: 800; line-height: 1.1; }
+    .site-footer address { margin: 5px 0 0; color: var(--muted); font-style: normal; font-size: 14px; line-height: 1.18; }
+    .site-footer p { margin: 13px 0 0; color: var(--muted); font-size: 12px; }
+
+    /* все кнопки, которые масштабируются */
+    .button,
+    .search-submit-btn,
+    .details-link,
+    .plan-button {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);          /* ← GPU-слой с самого начала */
+    }
+
+    /* hover — добавляем scale поверх translateZ */
+    .search-submit-btn:hover { transform: translateZ(0) scale(1.03); }
+    .button-primary:hover    { transform: translateZ(0) scale(1.03); }
+    .button-secondary:hover  { transform: translateZ(0) scale(1.03); /* + остальные стили */ }
+    .details-link:hover      { transform: translateZ(0) scale(1.03); }
+    .plan-button:hover       { transform: translateZ(0) scale(1.03); }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <aside class="side-panel side-panel-left" aria-hidden="true"></aside>
+    <aside class="side-panel side-panel-right" aria-hidden="true"></aside>
+
+    <div class="lantern-field" aria-hidden="true">
+      <img class="light-1-icon" alt="" src="image/light.png">
+    </div>
+
+    <div class="page">
+      <header class="site-header">
+        <a class="logo-link" href="index.html" aria-label="Doramaflix">
+          <img src="image/logo.png" alt="Doramaflix" class="logo">
+        </a>
+        <div class="header-content">
+          <form class="search-form">
+            <div class="search-input-wrap">
+              <input placeholder="Найти дораму, жанр или студию" autocomplete="off">
+              <button type="button" class="search-clear-btn" aria-label="Очистить поиск">×</button>
+            </div>
+            <button type="button" class="search-submit-btn">Найти</button>
+          </form>
+          <nav class="main-nav" aria-label="Основная навигация">
+            <a class="active" href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="subcribe.html">Подписка</a>
+            <a href="cabinet.html">Личный кабинет</a>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero">
+          <img src="image/hall.png" alt="" class="hero-backdrop" aria-hidden="true">
+          <div class="hero-copy">
+            <p class="section-label">онлайн-кинотеатр восточных сериалов</p>
+            <h1>Смотри дорамы, лакорны и китайские хиты в одном месте</h1>
+            <p class="hero-description">Здесь собрана большая коллекция сериалов на любой вкус — от лёгких романтических историй до захватывающих драм. Удобный интерфейс и персональные рекомендации помогут быстро найти то, что захочется посмотреть именно сейчас.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="catalog.html">Перейти в каталог</a>
+              <a class="button button-secondary" href="#">Найти случайную дораму</a>
+            </div>
+          </div>
+          <dl class="hero-stats">
+            <div><dt>Тайтлов в базе</dt><dd>3 020+</dd></div>
+            <div><dt>Новых серий в день</dt><dd>20+</dd></div>
+            <div><dt>Качество</dt><dd>HD / Full HD</dd></div>
+          </dl>
+        </section>
+
+        <section class="content-section">
+          <p class="section-label">популярные</p>
+          <h2>Выбор зрителей</h2>
+          <div class="show-grid">
+            <article class="show-card">
+              <div class="poster-frame"><img src="image/a-tale-of-1000-stars.png" alt="Сказка о 1000 звёзд" class="poster image-position-top"></div>
+              <div class="card-copy">
+                <h3>Сказка о 1000 звёзд</h3>
+                <p>2021 • Драма, боевик</p>
+                <span class="episode-badge">10 серий</span>
+                <span class="country">Таиланд</span>
+                <a class="details-link" href="a-tale-of-1000-stars.html">Подробнее</a>
+              </div>
+            </article>
+            <article class="show-card">
+              <div class="poster-frame"><img src="image/love-O2O.png" alt="Легкая улыбка покоряет мир" class="poster image-position-high"></div>
+              <div class="card-copy">
+                <h3>Легкая улыбка покоряет мир</h3>
+                <p>2016 • Драма, романтика</p>
+                <span class="episode-badge">30 серий</span>
+                <span class="country">Китай</span>
+                <a class="details-link" href="love-O2O.html">Подробнее</a>
+              </div>
+            </article>
+            <article class="show-card">
+              <div class="poster-frame"><img src="image/crash-landing-on-you.png" alt="Любовь приходит с неба" class="poster image-position-sky"></div>
+              <div class="card-copy">
+                <h3>Любовь приходит с неба</h3>
+                <p>2019 • Романтика, комедия</p>
+                <span class="episode-badge">16 серий</span>
+                <span class="country">Корея</span>
+                <a class="details-link" href="crash-landing-on-you.html">Подробнее</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="content-section">
+          <p class="section-label">новинки</p>
+          <h2>Недавно вышедшие</h2>
+          <div class="show-grid">
+            <article class="show-card">
+              <div class="poster-frame"><img src="image/nine-puzzles.png" alt="Девять пазлов" class="poster image-position-puzzle"></div>
+              <div class="card-copy">
+                <h3>Девять пазлов</h3>
+                <p>2025 • Детектив, триллер</p>
+                <span class="episode-badge">11 серий</span>
+                <span class="country">Корея</span>
+                <a class="details-link" href="nine-puzzles.html">Подробнее</a>
+              </div>
+            </article>
+            <article class="show-card">
+              <div class="poster-frame"><img src="image/countdown-to-yes.png" alt="Обратный отсчет до да" class="poster image-position-date"></div>
+              <div class="card-copy">
+                <h3>Обратный отсчет до "да"</h3>
+                <p>2026 • Драма, романтика</p>
+                <span class="episode-badge">11 серий</span>
+                <span class="country">Япония</span>
+                <a class="details-link" href="countdown-to-yes.html">Подробнее</a>
+              </div>
+            </article>
+            <article class="show-card">
+              <div class="poster-frame"><img src="image/my-romance-scammer.png" alt="Моя романтическая афера" class="poster image-position-romance"></div>
+              <div class="card-copy">
+                <h3>Моя романтическая афера</h3>
+                <p>2026 • Комедия, романтика</p>
+                <span class="episode-badge">12 серий</span>
+                <span class="country">Таиланд</span>
+                <a class="details-link" href="my-romance-scammer.html">Подробнее</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="plans-section">
+          <p class="section-label">подписка</p>
+          <h2>Тарифы</h2>
+          <div class="plans-grid">
+            <article class="plan-card">
+              <h3>Пробная неделя</h3><strong>1 ₽</strong>
+              <ul><li>7 дней доступа</li><li>Полный каталог</li></ul>
+              <a class="plan-button" href="subcribe.html">Оформить</a>
+            </article>
+            <article class="plan-card">
+              <h3>1 месяц</h3><strong>399 ₽</strong>
+              <ul><li>30 дней</li><li>Доступ к Premium</li></ul>
+              <a class="plan-button" href="subcribe.html">Оформить</a>
+            </article>
+            <article class="plan-card">
+              <h3>3 месяца</h3><strong>999 ₽</strong>
+              <ul><li>90 дней</li><li>Оптимальный пакет</li></ul>
+              <a class="plan-button" href="subcribe.html">Оформить</a>
+            </article>
+            <article class="plan-card">
+              <h3>1 год</h3><strong>3490 ₽</strong>
+              <ul><li>365 дней</li><li>Максимальная выгода</li></ul>
+              <a class="plan-button" href="subcribe.html">Оформить</a>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <h2>Контакты</h2>
+        <address>
+          ИП Толстоброва А.А.<br>
+          Иркутск, ул. Красноярская, д. 37, оф. 2<br>
+          Телефон: (6767) 11-03-77<br>
+          E-mail: Doramaflix@mail.ru
+        </address>
+        <p>© 2026 Doramaflix.ru. Все права защищены.</p>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+  const DRAMAS = [
+    { title: "Девять пазлов",              url: "nine-puzzles.html" },
+    { title: "Легкая улыбка покоряет мир", url: "love-O2O.html" },
+    { title: "Обстоятельства смерти",      url: "manner-of-death.html" },
+    { title: "Истинная красота",           url: "true-beauty.html" },
+    { title: "Прачечная Минато",           url: "minato's-laundromat.html" },
+    { title: "Далекие странники",          url: "word-of-honor.html" },
+    { title: "Моя романтическая афера",    url: "my-romance-scammer.html" },
+    { title: "Любовь приходит с неба",     url: "crash-landing-on-you.html" },
+    { title: "Отсчёт до Да",               url: "countdown-to-yes.html" },
+    { title: "Неукротимый",                url: "the-untamed.html" },
+    { title: "Сказка о 1000 звёзд",        url: "a-tale-of-1000-stars.html" },
+    { title: "Оказывается, можно...",      url: "cherry-magic.html" },
+  ];
+
+  const randomBtn = document.querySelector('.button-secondary');
+  randomBtn.addEventListener('click', e => {
+    e.preventDefault();
+    window.location.href = DRAMAS[Math.floor(Math.random() * DRAMAS.length)].url;
+  });
+
+  setupSearch(
+    document.querySelector('.search-form input'),
+    document.querySelector('.search-form > button'),
+    document.querySelector('.search-clear-btn')
+  );
+
+  function setupSearch(input, submitBtn, clearBtn) {
+    const dropdown = document.createElement('ul');
+    dropdown.style.cssText = `
+      position:fixed; z-index:9999;
+      list-style:none; margin:0; padding:4px 0;
+      background:#1e0d1b; border:1px solid #9b6973;
+      border-top:none; border-radius:0 0 10px 10px;
+      display:none; box-shadow:0 8px 20px rgba(0,0,0,0.6);
+    `;
+    document.body.appendChild(dropdown);
+
+    function toggleClearButton() {
+      if (!clearBtn) return;
+      clearBtn.style.display = input.value.trim() ? "grid" : "none";
+    }
+
+    function positionDropdown() {
+      const r = input.getBoundingClientRect();
+      dropdown.style.top   = r.bottom + 'px';
+      dropdown.style.left  = r.left   + 'px';
+      dropdown.style.width = r.width  + 'px';
+    }
+
+    function openDropdown() {
+      input.style.borderRadius = '10px 10px 0 0';
+      input.style.borderBottom = '1px solid transparent';
+    }
+
+    function closeDropdown() {
+      dropdown.style.display = 'none';
+      input.style.borderRadius = '10px';
+      input.style.borderBottom = '';
+    }
+
+    function renderDropdown(query) {
+      const q = query.trim().toLowerCase();
+      dropdown.innerHTML = '';
+      if (!q) { closeDropdown(); return; }
+      const matches = DRAMAS.filter(d => d.title.toLowerCase().includes(q));
+      if (!matches.length) { closeDropdown(); return; }
+      matches.forEach(d => {
+        const li = document.createElement('li');
+        li.textContent = d.title;
+        li.style.cssText = 'padding:9px 12px;font-size:13px;cursor:pointer;color:#fff;transition:background 0.15s;';
+        li.addEventListener('mouseenter', () => li.style.background = 'rgba(62,37,36,0.8)');
+        li.addEventListener('mouseleave', () => li.style.background = 'transparent');
+        li.addEventListener('mousedown',  () => { input.value = d.title; toggleClearButton(); closeDropdown(); });
+        dropdown.appendChild(li);
+      });
+      positionDropdown();
+      openDropdown();
+      dropdown.style.display = 'block';
+    }
+
+    input.addEventListener('input', () => { renderDropdown(input.value); toggleClearButton(); });
+    input.addEventListener('focus', () => renderDropdown(input.value));
+    input.addEventListener('blur',  () => setTimeout(closeDropdown, 150));
+
+    window.addEventListener('scroll', () => { if (dropdown.style.display !== 'none') positionDropdown(); });
+    window.addEventListener('resize', () => { if (dropdown.style.display !== 'none') positionDropdown(); });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('mousedown', e => {
+        e.preventDefault();
+        input.value = '';
+        toggleClearButton();
+        closeDropdown();
+        input.focus();
+      });
+      toggleClearButton();
+    }
+
+    if (submitBtn) {
+      input.addEventListener('keydown', e => {
+        if (e.key !== 'Enter') return;
+        const q = input.value.trim().toLowerCase();
+        if (!q) return;
+        const target = DRAMAS.find(d => d.title.toLowerCase() === q)
+                    || DRAMAS.find(d => d.title.toLowerCase().includes(q));
+        if (target) window.location.href = target.url;
+      });
+      submitBtn.addEventListener('click', () => {
+        const q = input.value.trim().toLowerCase();
+        if (!q) return;
+        const target = DRAMAS.find(d => d.title.toLowerCase() === q)
+                    || DRAMAS.find(d => d.title.toLowerCase().includes(q));
+        if (target) window.location.href = target.url;
+      });
+    }
+  }
+  </script>
+</body>
+</html>
+image/light.png

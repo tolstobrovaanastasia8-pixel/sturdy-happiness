@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Личный кабинет</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+    :root {
+      --page-width: 872px;
+      --stage-width: 100%;
+      --side-width: 320px;
+      --surface-dark: #150412;
+      --line: #342425;
+      --text: #ffffff;
+      --muted: #bdaeb4;
+      --accent: #ed6c7b;
+      --accent-strong: #bd2c43;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-width: var(--stage-width); min-height: 100%; margin: 0; }
+
+    body {
+      background: var(--surface-dark);
+      color: var(--text);
+      font-family: "Inter", Arial, sans-serif;
+      font-size: 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    .stage {
+      position: relative;
+      width: var(--stage-width);
+      min-height: 100vh;
+      margin: 0 auto;
+      background:
+        linear-gradient(90deg, transparent 0 var(--side-width), rgba(21,4,18,0.98) var(--side-width) calc(100% - var(--side-width)), transparent calc(100% - var(--side-width))),
+        var(--surface-dark);
+      overflow: hidden;
+    }
+    .stage::before, .stage::after {
+      content: "";
+      position: absolute;
+      left: var(--side-width);
+      width: calc(100% - var(--side-width) * 2);
+      height: 1px;
+      background: rgba(63,45,47,0.65);
+      z-index: 1;
+    }
+    .stage::before { top: 0; }
+    .stage::after  { bottom: 0; }
+
+    .side-panel {
+      position: absolute; top: 0;
+      width: var(--side-width); height: 100%;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #632428 0%, #160e28 100%);
+      z-index: 0;
+    }
+    .side-panel-left  { left: 0; }
+    .side-panel-right { right: 0; }
+
+    .page { position: relative; z-index: 1; width: var(--page-width); margin: 0 auto; padding: 12px 0; }
+
+    /* ── header ── */
+    .site-header {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1a0b17;
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      height: 102px;
+      overflow: hidden;
+    }
+    .logo-link { display: grid; place-items: center; border-right: 1px solid var(--line); }
+    .logo { width: 84px; height: 84px; border-radius: 50%; }
+    .header-content { padding: 9px 10px 0; }
+
+    /* ── search ── */
+    .search-form { display: grid; grid-template-columns: 1fr 138px; gap: 10px; align-items: center; }
+    .search-input-wrap { position: relative; }
+    .search-input-wrap input { padding-right: 38px; }
+    .search-clear-btn {
+      position: absolute; right: 10px; top: 45%;
+      transform: translateY(-50%);
+      display: grid; place-items: center;
+      width: 20px; height: 20px;
+      border: none; border-radius: 50%;
+      background: transparent; color: #b68f98;
+      font-size: 18px; line-height: 1;
+      cursor: pointer; padding: 0;
+    }
+    .search-form input, .search-submit-btn { height: 32px; border-radius: 10px; }
+    .search-form input {
+      width: 100%;
+      border: 1px solid #9b6973;
+      background: transparent; color: var(--text);
+      outline: none; padding: 0 12px;
+    }
+    .search-form input::placeholder { color: #807078; }
+    .search-submit-btn {
+      border: 1px solid #923044;
+      background: #40121e; color: var(--text);
+      font-weight: 700; cursor: pointer;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+    .search-submit-btn:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(146,48,68,0.45);
+      transform: translateZ(0) scale(1.03);
+    }
+
+    /* ── nav ── */
+    .main-nav { display: flex; align-items: center; gap: 31px; margin-top: 15px; color: #c8b5bd; font-size: 12px; font-weight: 700; }
+    .main-nav a { display: inline-grid; place-items: center; min-width: 86px; height: 34px; border-radius: 20px; padding: 0 12px; }
+    .main-nav a:hover, .main-nav .active { color: var(--text); background: rgba(62,37,36,0.7); }
+
+    /* ── content ── */
+    .content-wrap {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1a0b17;
+      margin-top: 11px;
+      padding: 23px 21px 20px;
+      display: flex; flex-direction: column; gap: 13px;
+    }
+    .section-label { margin: 0; color: var(--accent); font-weight: 800; text-transform: lowercase; font-size: 14px; }
+    .content-wrap h1 { margin: 0; font-size: 24px; font-weight: 700; }
+
+    /* ── profile card ── */
+    .profile-card { border: 1px solid var(--line); border-radius: 10px; background: #210f1e; }
+    .profile-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 13px 14px 13px 9px;
+    }
+    .profile-row + .profile-row { border-top: 1px solid var(--line); }
+    .profile-row .label { color: var(--muted); font-size: 14px; }
+    .profile-row .value { font-weight: 600; font-size: 14px; }
+
+    .profile-actions {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 14px; padding: 13px 16px 13px 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    /* ── buttons ── */
+    .btn-renew, .btn-logout {
+      height: 38px; border-radius: 10px;
+      font-weight: 700; font-size: 14px;
+      cursor: pointer; display: grid; place-items: center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+    .btn-renew {
+      padding: 0 19px;
+      border: 1px solid #b7384e;
+      background: var(--accent-strong);
+      color: #fff;
+    }
+    .btn-renew:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(146,48,68,0.45);
+      transform: translateZ(0) scale(1.03);
+    }
+    .btn-logout {
+      padding: 0 27px;
+      border: 1px solid var(--line);
+      background: #291325;
+      color: var(--text);
+    }
+    .btn-logout:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 0 0 1px rgba(52,36,37,0.8);
+      transform: translateZ(0) scale(1.03);
+    }
+
+    /* ── stats ── */
+    .stats-wrap {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1a0b17;
+      margin-top: 11px;
+      padding: 18px 21px;
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
+    .stat-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #210f1e;
+      padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .stat-value { font-size: 20px; font-weight: 700; color: var(--accent); }
+    .stat-label { font-size: 12px; color: var(--muted); }
+
+    /* ── footer ── */
+    .site-footer {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1a0b17;
+      height: 158px; margin-top: 13px; padding: 16px 21px;
+    }
+    .site-footer h2 { margin-top: 0; font-size: 24px; font-weight: 800; line-height: 1.1; }
+    .site-footer address { margin: -15px 0 0; color: var(--muted); font-style: normal; font-size: 14px; line-height: 1.18; }
+    .site-footer p { margin: 13px 0 0; color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <aside class="side-panel side-panel-left" aria-hidden="true"></aside>
+    <aside class="side-panel side-panel-right" aria-hidden="true"></aside>
+    <div aria-hidden="true" style="position:absolute;"><img alt="" src="image/light.png"></div>
+
+    <main class="page">
+      <header class="site-header">
+        <a class="logo-link" href="index.html"><img class="logo" src="image/logo.png" alt="Doramaflix"></a>
+        <div class="header-content">
+          <form class="search-form">
+            <div class="search-input-wrap">
+              <input placeholder="Найти дораму, жанр или студию" autocomplete="off">
+              <button type="button" class="search-clear-btn" aria-label="Очистить поиск">×</button>
+            </div>
+            <button type="button" class="search-submit-btn">Найти</button>
+          </form>
+          <nav class="main-nav">
+            <a href="index.html">Главная</a>
+            <a href="catalog.html">Каталог</a>
+            <a href="subcribe.html">Подписка</a>
+            <a class="active" href="cabinet.html">Личный кабинет</a>
+          </nav>
+        </div>
+      </header>
+
+      <section class="content-wrap">
+        <p class="section-label">профиль</p>
+        <h1 id="welcome-heading">Добро пожаловать!</h1>
+
+        <div class="profile-card">
+          <div class="profile-row">
+            <span class="label">Имя пользователя</span>
+            <span class="value" id="profile-username">—</span>
+          </div>
+          <div class="profile-row">
+            <span class="label">Статус</span>
+            <span class="value">Premium</span>
+          </div>
+          <div class="profile-row">
+            <span class="label">Подписка активна до</span>
+            <span class="value">31.12.2026</span>
+          </div>
+          <div class="profile-row">
+            <span class="label">Последний просмотр</span>
+            <span class="value">Сказка о 1000 звёзд, эпизод 1</span>
+          </div>
+          <div class="profile-actions">
+            <a href="subcribe.html" class="btn-renew">Продлить подписку</a>
+            <a href="login-and-registration.html" class="btn-logout" id="btn-logout">Выйти</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-wrap">
+        <p class="section-label" style="margin:0 0 4px;">моя статистика</p>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <span class="stat-value">47</span>
+            <span class="stat-label">Просмотрено эпизодов</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">38</span>
+            <span class="stat-label">Часов за экраном</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value">Драма</span>
+            <span class="stat-label">Любимый жанр</span>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <h2>Контакты</h2>
+        <address>ИП Толстоброва А.А.<br>Иркутск, ул. Красноярская, д. 37, оф. 2<br>Телефон: (6767) 11-03-77<br>E-mail: Doramaflix@mail.ru</address>
+        <p>© 2026 Doramaflix.ru. Все права защищены.</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+  /* ── DRAMAS ── */
+  const DRAMAS = [
+    { title: "Девять пазлов",              url: "nine-puzzles.html" },
+    { title: "Легкая улыбка покоряет мир", url: "love-O2O.html" },
+    { title: "Обстоятельства смерти",      url: "manner-of-death.html" },
+    { title: "Истинная красота",           url: "true-beauty.html" },
+    { title: "Прачечная Минато",           url: "minato's-laundromat.html" },
+    { title: "Далекие странники",          url: "word-of-honor.html" },
+    { title: "Моя романтическая афера",    url: "my-romance-scammer.html" },
+    { title: "Любовь приходит с неба",     url: "crash-landing-on-you.html" },
+    { title: "Отсчёт до Да",               url: "countdown-to-yes.html" },
+    { title: "Неукротимый",                url: "the-untamed.html" },
+    { title: "Сказка о 1000 звёзд",        url: "a-tale-of-1000-stars.html" },
+    { title: "Оказывается, можно...",      url: "cherry-magic.html" },
+  ];
+
+  /* ── username from localStorage ── */
+  const stored = localStorage.getItem('df_username');
+  if (stored) {
+    document.getElementById('profile-username').textContent = stored;
+    document.getElementById('welcome-heading').textContent  = `Добро пожаловать, «${stored}»`;
+  }
+
+  /* ── logout ── */
+  document.getElementById('btn-logout').addEventListener('click', e => {
+    e.preventDefault();
+    localStorage.removeItem('df_username');
+    window.location.href = 'login-and-registration.html';
+  });
+
+  /* ── search ── */
+  setupSearch(
+    document.querySelector('.search-form input'),
+    document.querySelector('.search-submit-btn'),
+    document.querySelector('.search-clear-btn')
+  );
+
+  function setupSearch(input, submitBtn, clearBtn) {
+    const dropdown = document.createElement('ul');
+    dropdown.style.cssText = `
+      position:fixed; z-index:9999;
+      list-style:none; margin:0; padding:4px 0;
+      background:#1e0d1b; border:1px solid #9b6973;
+      border-top:none; border-radius:0 0 10px 10px;
+      display:none; box-shadow:0 8px 20px rgba(0,0,0,0.6);
+    `;
+    document.body.appendChild(dropdown);
+
+    function toggleClear() {
+      if (clearBtn) clearBtn.style.display = input.value.trim() ? 'grid' : 'none';
+    }
+    function pos() {
+      const r = input.getBoundingClientRect();
+      dropdown.style.top = r.bottom + 'px';
+      dropdown.style.left = r.left + 'px';
+      dropdown.style.width = r.width + 'px';
+    }
+    function open() { input.style.borderRadius = '10px 10px 0 0'; input.style.borderBottom = '1px solid transparent'; }
+    function close() { dropdown.style.display = 'none'; input.style.borderRadius = '10px'; input.style.borderBottom = ''; }
+
+    function render(query) {
+      const q = query.trim().toLowerCase();
+      dropdown.innerHTML = '';
+      if (!q) { close(); return; }
+      const matches = DRAMAS.filter(d => d.title.toLowerCase().includes(q));
+      if (!matches.length) { close(); return; }
+      matches.forEach(d => {
+        const li = document.createElement('li');
+        li.textContent = d.title;
+        li.style.cssText = 'padding:9px 12px;font-size:13px;cursor:pointer;color:#fff;transition:background 0.15s;';
+        li.addEventListener('mouseenter', () => li.style.background = 'rgba(62,37,36,0.8)');
+        li.addEventListener('mouseleave', () => li.style.background = 'transparent');
+        li.addEventListener('mousedown',  () => { input.value = d.title; toggleClear(); close(); });
+        dropdown.appendChild(li);
+      });
+      pos(); open();
+      dropdown.style.display = 'block';
+    }
+
+    input.addEventListener('input', () => { render(input.value); toggleClear(); });
+    input.addEventListener('focus', () => render(input.value));
+    input.addEventListener('blur',  () => setTimeout(close, 150));
+    window.addEventListener('scroll', () => { if (dropdown.style.display !== 'none') pos(); });
+    window.addEventListener('resize', () => { if (dropdown.style.display !== 'none') pos(); });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('mousedown', e => {
+        e.preventDefault();
+        input.value = ''; toggleClear(); close(); input.focus();
+      });
+      toggleClear();
+    }
+
+    function go() {
+      const q = input.value.trim().toLowerCase();
+      if (!q) return;
+      const t = DRAMAS.find(d => d.title.toLowerCase() === q) || DRAMAS.find(d => d.title.toLowerCase().includes(q));
+      if (t) window.location.href = t.url;
+    }
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    if (submitBtn) submitBtn.addEventListener('click', go);
+  }
+  </script>
+</body>
+</html>

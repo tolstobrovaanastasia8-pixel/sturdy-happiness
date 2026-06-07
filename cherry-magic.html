@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оказывается, можно получить суперспособность, если хранить девственность до 30 лет</title>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+    :root {
+      --page-width: 872px;
+      --stage-width: 100%;
+      --stage-height: 1003px;
+      --side-width: 320px;
+      --surface-dark: #1A0B17;
+      --surface-card: #210f1e;
+      --line: #342425;
+      --text: #ffffff;
+      --muted: #bdaeb4;
+      --accent: #ed6c7b;
+      --accent-strong: #bd2c43;
+      --gold: #deb673;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { min-width: var(--stage-width); min-height: 100%; margin: 0; }
+
+    body {
+      background: var(--surface-dark);
+      color: var(--text);
+      font-family: "Inter", Arial, sans-serif;
+      font-size: 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
+
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    .stage {
+      position: relative;
+      width: var(--stage-width);
+      min-height: var(--stage-height);
+      margin: 0 auto;
+      background:
+        linear-gradient(90deg, transparent 0 var(--side-width), rgba(21,4,18,0.98) var(--side-width) calc(100% - var(--side-width)), transparent calc(100% - var(--side-width))),
+        var(--surface-dark);
+      overflow: hidden;
+    }
+    .stage::before, .stage::after {
+      content: "";
+      position: absolute;
+      left: var(--side-width);
+      width: calc(100% - var(--side-width) * 2);
+      height: 1px;
+      background: rgba(63,45,47,0.65);
+      z-index: 1;
+    }
+    .stage::before { top: 0; }
+    .stage::after  { bottom: 0; }
+
+    .side-panel {
+      position: absolute; top: 0;
+      width: var(--side-width); height: 100%;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #632428 0%, #160e28 100%);
+      z-index: 0;
+    }
+    .side-panel-left  { left: 0; }
+    .side-panel-right { right: 0; }
+
+    .lantern-field { position: absolute; }
+
+    .page { position: relative; z-index: 2; width: var(--page-width); margin: 0 auto; padding: 12px 0; }
+
+    .site-header, .show-wrap, .site-footer {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1A0B17;
+    }
+
+    /* ── header ── */
+    .site-header {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      height: 102px;
+      overflow: hidden;
+    }
+    .logo-link { display: grid; place-items: center; border-right: 1px solid var(--line); }
+    .logo { width: 84px; height: 84px; border-radius: 50%; }
+    .header-content { padding: 9px 10px 0; }
+
+    /* ── search ── */
+    .search-form { display: grid; grid-template-columns: 1fr 138px; gap: 10px; align-items: center; }
+    .search-input-wrap { position: relative; }
+    .search-input-wrap input { padding-right: 38px; }
+    .search-clear-btn {
+      position: absolute; right: 10px; top: 45%;
+      transform: translateY(-50%);
+      display: grid; place-items: center;
+      width: 20px; height: 20px;
+      border: none; border-radius: 50%;
+      background: transparent; color: #b68f98;
+      font-size: 18px; line-height: 1;
+      cursor: pointer; padding: 0;
+    }
+    .search-form input, .search-submit-btn { height: 32px; border-radius: 10px; }
+    .search-form input {
+      width: 100%;
+      border: 1px solid #9b6973;
+      background: transparent; color: var(--text);
+      outline: none; padding: 0 12px;
+    }
+    .search-form input::placeholder { color: #807078; }
+    .search-submit-btn {
+      border: 1px solid #923044;
+      background: #40121e; color: var(--text);
+      font-weight: 700; cursor: pointer;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+    .search-submit-btn:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(146,48,68,0.45);
+      transform: translateZ(0) scale(1.03);
+    }
+
+    /* ── nav ── */
+    .main-nav { display: flex; align-items: center; gap: 31px; margin-top: 15px; color: #c8b5bd; font-size: 12px; font-weight: 700; }
+    .main-nav a { display: inline-grid; place-items: center; min-width: 86px; height: 34px; border-radius: 20px; padding: 0 12px; }
+    .main-nav a:hover, .main-nav .active { color: var(--text); background: rgba(62,37,36,0.7); }
+
+    /* ── show ── */
+    .show-wrap { margin-top: 11px; padding: 12px; }
+    .show-layout { display: grid; grid-template-columns: 258px 1fr; gap: 16px; }
+
+    .poster-card { padding: 14px; height: fit-content; background: #1A0B17; border: 1px solid var(--line); border-radius: 10px; }
+    .poster { top: -15px; width: 259.36px; height: 360.06px; object-fit: cover; display: block; position: relative; left: 50%; transform: translateX(-50%); border-radius: 10px 10px 0 0; }
+    .poster-info { padding: 10px; }
+    .poster-info h1 { margin: -10px 0 0 -10px; font-size: 16px; line-height: 1; }
+    .poster-info p { margin: 10px 0 0 -10px; color: var(--muted); line-height: 1.15; font-size: 13px; }
+    .meta { margin: 10px 0 -10px -10px; display: flex; flex-direction: column; width: fit-content; gap: 6px; }
+    .meta span { border: 1px solid var(--line); border-radius: 20px; padding: 3px 8px; color: var(--muted); font-size: 13px; }
+
+    .player-panel { padding: 14px; height: fit-content; background: #1A0B17; border: 1px solid var(--line); border-radius: 10px; }
+    .section-label { margin: 2px 0 8px; color: var(--accent); font-weight: 800; text-transform: lowercase; }
+
+    /* ── pill buttons ── */
+    .player-actions { display: flex; gap: 10px; margin-bottom: 10px; }
+    .pill {
+      height: 32px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1A0B17;
+      color: var(--muted);
+      padding: 0 16px;
+      cursor: pointer;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+      transition: filter 0.2s, box-shadow 0.2s, color 0.15s;
+    }
+    .pill:hover {
+      color: #ffffff;
+      filter: brightness(1.3);
+      box-shadow: 0 0 0 1px rgba(52,36,37,0.8);
+      transform: translateZ(0) scale(1.03);
+    }
+    .pill a { color: inherit; }
+
+    /* ── player card ── */
+    .player-card { padding: 10px; min-height: 338px; background: #210f1e; border: 1px solid var(--line); border-radius: 10px; }
+    .video-placeholder { height: 260px; display: grid; place-items: center; font-size: 74px; color: #f2f2f2; }
+
+    /* ── custom selects ── */
+    .selectors { display: flex; gap: 8px; margin-bottom: 10px; }
+    .selectors select { display: none; }
+    .custom-select-wrapper { position: relative; }
+    .custom-select-trigger {
+      height: 30px; border: 1px solid var(--line); border-radius: 10px;
+      background: #1A0B17; color: var(--text);
+      padding: 0 24px 0 10px; font-size: 12px;
+      cursor: pointer; white-space: nowrap;
+      backface-visibility: hidden; transform: translateZ(0);
+      transition: border-radius 0.15s;
+      position: relative;
+    }
+    .custom-select-arrow {
+      position: absolute; right: 8px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted); font-size: 11px; pointer-events: none;
+    }
+    .custom-select-dropdown {
+      position: absolute; z-index: 9999; top: 100%;
+      left: 0; right: 0; margin: 0; padding: 4px 0;
+      list-style: none; background: #1A0B17;
+      border: 1px solid var(--line); border-top: none;
+      border-radius: 0 0 10px 10px;
+      display: none; max-height: 180px; overflow-y: auto;
+    }
+    .custom-select-dropdown li {
+      padding: 7px 10px; font-size: 12px;
+      cursor: pointer; color: #fff;
+      transition: background 0.15s;
+    }
+    .custom-select-dropdown li:hover { background: rgba(62,37,36,0.8); }
+
+    /* ── review card ── */
+    .review-card { margin-top: 14px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: #1a0b17; }
+    .review-card h2 { margin: 0 0 14px; font-size: 16px; }
+    .review-card > label { display: block; margin-bottom: 6px; color: var(--muted); font-size: 13px; }
+    .review-card input[type="text"] { width: 100%; height: 40px; border: 1px solid var(--line); border-radius: 10px; background: #291325; color: var(--text); padding: 0 12px; outline: none; }
+
+    .rating-row { display: flex; justify-content: space-between; align-items: flex-start; margin-top: 12px; gap: 12px; }
+    .rating-col label, .share-col .share-text { display: block; margin-bottom: 8px; color: var(--muted); font-size: 13px; }
+
+    /* ── stars ── */
+    .star-rating { display: flex; gap: 6px; }
+    .star-rating span {
+      font-size: 30px;
+      color: #5a4050;
+      cursor: pointer;
+      line-height: 1;
+      user-select: none;
+      transition: color 0.15s, transform 0.15s, text-shadow 0.15s;
+    }
+    .star-rating span.hover  { color: var(--gold); transform: scale(1.2); text-shadow: 0 0 8px rgba(222,182,115,0.6); }
+    .star-rating span.active { color: var(--gold); text-shadow: 0 0 6px rgba(222,182,115,0.45); }
+    .star-rating span.active.hover { transform: scale(1.2); text-shadow: 0 0 10px rgba(222,182,115,0.8); }
+
+    /* ── social ── */
+    .social-icons { display: flex; gap: 8px; align-items: center; }
+    .soc {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .soc img { width: 30px; height: 30px; margin-left: 50px; }
+
+    .submit { margin-top: 5px; height: 36px; border-radius: 10px; border: 1px solid #bd2b42; background: var(--accent-strong); color: #fff; font-weight: 700; padding: 7px 14px; cursor: pointer; display: inline-block; transition: transform 0.2s; }
+    .submit:hover { transform: scale(1.03); }
+
+    /* ── modal ── */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay:target { display: flex; }
+    .modal-box { position: relative; background: #2e1228; border: 1px solid var(--line); border-radius: 14px; width: 440px; padding: 60px 40px; text-align: center; }
+    .modal-text { margin: 0; font-size: 22px; font-weight: 700; }
+    .modal-close { position: absolute; top: 12px; right: 16px; color: var(--text); font-size: 22px; line-height: 1; }
+
+    /* ── footer ── */
+    .site-footer { height: 158px; margin-top: 13px; padding: 16px 21px; }
+    .site-footer h2 { margin-top: 0; font-size: 24px; font-weight: 800; line-height: 1.1; }
+    .site-footer address { margin: -15px 0 0; color: var(--muted); font-style: normal; font-size: 14px; line-height: 1.18; }
+    .site-footer p { margin: 13px 0 0; color: var(--muted); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <aside class="side-panel side-panel-left" aria-hidden="true"></aside>
+    <aside class="side-panel side-panel-right" aria-hidden="true"></aside>
+
+    <div class="lantern-field" aria-hidden="true">
+      <img class="light-1-icon" alt="" src="image/light.png">
+    </div>
+
+    <main class="page">
+      <header class="site-header">
+        <a class="logo-link" href="index.html"><img class="logo" src="image/logo.png" alt="Doramaflix"></a>
+        <div class="header-content">
+          <form class="search-form">
+            <div class="search-input-wrap">
+              <input placeholder="Найти дораму, жанр или студию" autocomplete="off">
+              <button type="button" class="search-clear-btn" aria-label="Очистить поиск">×</button>
+            </div>
+            <button type="button" class="search-submit-btn">Найти</button>
+          </form>
+          <nav class="main-nav">
+            <a href="index.html">Главная</a>
+            <a class="active" href="catalog.html">Каталог</a>
+            <a href="subcribe.html">Подписка</a>
+            <a href="cabinet.html">Личный кабинет</a>
+          </nav>
+        </div>
+      </header>
+
+      <section class="show-wrap">
+        <div class="show-layout">
+
+          <article class="poster-card">
+            <img src="image/cherry-magic.png" alt="Оказывается, можно получить суперспособность, если хранить девственность до 30 лет" class="poster">
+            <div class="poster-info">
+              <h1>Оказывается, можно получить суперспособность, если хранить девственность до 30 лет</h1>
+              <p>30-летний Киёси, всё ещё будучи девственником, обретает магическую силу, которая позволяет ему при прикосновении читать мысли других людей. Так он узнаёт тайну одного из коллег.</p>
+              <div class="meta">
+                <span>Год: 2020</span>
+                <span>Страна: Япония</span>
+                <span>Жанр: мелодрама, фэнтази</span>
+                <span>Компания: TV Tokyo</span>
+                <span>Эпизодов: 12</span>
+                <span>Оценка: 7.7</span>
+              </div>
+            </div>
+          </article>
+
+          <div class="player-panel">
+            <h2 class="section-label">страница сериала</h2>
+            <div class="player-actions">
+              <button class="pill"><a href="cherry-magic.html">Смотреть трейлер</a></button>
+              <button class="pill"><a href="catalog.html">Вернуться к каталогу</a></button>
+            </div>
+            <div class="player-card">
+              <div class="selectors">
+                <select id="ep-select">
+                  <option>1 эпизод</option><option>2 эпизод</option><option>3 эпизод</option>
+                  <option>4 эпизод</option><option>5 эпизод</option><option>6 эпизод</option>
+                  <option>7 эпизод</option><option>8 эпизод</option><option>9 эпизод</option>
+                  <option>10 эпизод</option><option>11 эпизод</option><option>12 эпизод</option>
+                </select>
+                <select id="dub-select">
+                  <option>Субтитры</option><option>Озвучка</option>
+                </select>
+              </div>
+              <div class="video-placeholder">▶</div>
+            </div>
+
+            <div class="review-card">
+              <h2>Пожалуйста, оставьте отзыв о данном сериале</h2>
+              <label>Комментарий</label>
+              <input type="text" placeholder="Введите комментарий">
+
+              <div class="rating-row">
+                <div class="rating-col">
+                  <label>Оценка</label>
+                  <div class="star-rating" id="stars">
+                    <span data-v="1">☆</span>
+                    <span data-v="2">☆</span>
+                    <span data-v="3">☆</span>
+                    <span data-v="4">☆</span>
+                    <span data-v="5">☆</span>
+                  </div>
+                </div>
+                <div class="share-col">
+                  <span class="share-text">Поделитесь своим мнением с друзьями</span>
+                  <div class="social-icons">
+                    <a class="soc" href="https://max.ru/"           title="Макс">     <img src="image/max.png"       alt="Макс"></a>
+                    <a class="soc" href="https://ok.ru/"            title="OK">       <img src="image/ok.png"        alt="Одноклассники"></a>
+                    <a class="soc" href="https://vk.com/"           title="VK">       <img src="image/vk.png"        alt="ВКонтакте"></a>
+                    <a class="soc" href="https://web.telegram.org/" title="Telegram"> <img src="image/telegram.png"  alt="Телеграм"></a>
+                    <a class="soc" href="https://pinterest.com/"    title="Pinterest"><img src="image/pinterest.png" alt="Пинтерест"></a>
+                  </div>
+                </div>
+              </div>
+              <a href="#modal" class="submit">Отправить</a>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <h2>Контакты</h2>
+        <address>ИП Толстоброва А.А.<br>Иркутск, ул. Красноярская, д. 37, оф. 2<br>Телефон: (6767) 11-03-77<br>E-mail: Doramaflix@mail.ru</address>
+        <p>© 2026 Doramaflix.ru. Все права защищены.</p>
+      </footer>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal-box">
+      <a href="#" class="modal-close">×</a>
+      <p class="modal-text">Благодарим за ваш отзыв!</p>
+    </div>
+  </div>
+
+  <script>
+  /* ── DRAMAS ── */
+  const DRAMAS = [
+    { title: "Девять пазлов",              url: "nine-puzzles.html" },
+    { title: "Легкая улыбка покоряет мир", url: "love-O2O.html" },
+    { title: "Обстоятельства смерти",      url: "manner-of-death.html" },
+    { title: "Истинная красота",           url: "true-beauty.html" },
+    { title: "Прачечная Минато",           url: "minato's-laundromat.html" },
+    { title: "Далекие странники",          url: "word-of-honor.html" },
+    { title: "Моя романтическая афера",    url: "my-romance-scammer.html" },
+    { title: "Любовь приходит с неба",     url: "crash-landing-on-you.html" },
+    { title: "Отсчёт до Да",               url: "countdown-to-yes.html" },
+    { title: "Неукротимый",                url: "the-untamed.html" },
+    { title: "Сказка о 1000 звёзд",        url: "a-tale-of-1000-stars.html" },
+    { title: "Оказывается, можно...",      url: "cherry-magic.html" },
+  ];
+
+  /* ── search ── */
+  setupSearch(
+    document.querySelector('.search-form input'),
+    document.querySelector('.search-submit-btn'),
+    document.querySelector('.search-clear-btn')
+  );
+
+  function setupSearch(input, submitBtn, clearBtn) {
+    const dropdown = document.createElement('ul');
+    dropdown.style.cssText = `
+      position:fixed; z-index:9999;
+      list-style:none; margin:0; padding:4px 0;
+      background:#1e0d1b; border:1px solid #9b6973;
+      border-top:none; border-radius:0 0 10px 10px;
+      display:none; box-shadow:0 8px 20px rgba(0,0,0,0.6);
+    `;
+    document.body.appendChild(dropdown);
+
+    function toggleClear() {
+      if (clearBtn) clearBtn.style.display = input.value.trim() ? 'grid' : 'none';
+    }
+    function pos() {
+      const r = input.getBoundingClientRect();
+      dropdown.style.top = r.bottom + 'px';
+      dropdown.style.left = r.left + 'px';
+      dropdown.style.width = r.width + 'px';
+    }
+    function open() { input.style.borderRadius = '10px 10px 0 0'; input.style.borderBottom = '1px solid transparent'; }
+    function close() { dropdown.style.display = 'none'; input.style.borderRadius = '10px'; input.style.borderBottom = ''; }
+
+    function render(query) {
+      const q = query.trim().toLowerCase();
+      dropdown.innerHTML = '';
+      if (!q) { close(); return; }
+      const matches = DRAMAS.filter(d => d.title.toLowerCase().includes(q));
+      if (!matches.length) { close(); return; }
+      matches.forEach(d => {
+        const li = document.createElement('li');
+        li.textContent = d.title;
+        li.style.cssText = 'padding:9px 12px;font-size:13px;cursor:pointer;color:#fff;transition:background 0.15s;';
+        li.addEventListener('mouseenter', () => li.style.background = 'rgba(62,37,36,0.8)');
+        li.addEventListener('mouseleave', () => li.style.background = 'transparent');
+        li.addEventListener('mousedown',  () => { input.value = d.title; toggleClear(); close(); });
+        dropdown.appendChild(li);
+      });
+      pos(); open();
+      dropdown.style.display = 'block';
+    }
+
+    input.addEventListener('input', () => { render(input.value); toggleClear(); });
+    input.addEventListener('focus', () => render(input.value));
+    input.addEventListener('blur',  () => setTimeout(close, 150));
+    window.addEventListener('scroll', () => { if (dropdown.style.display !== 'none') pos(); });
+    window.addEventListener('resize', () => { if (dropdown.style.display !== 'none') pos(); });
+
+    if (clearBtn) {
+      clearBtn.addEventListener('mousedown', e => {
+        e.preventDefault();
+        input.value = ''; toggleClear(); close(); input.focus();
+      });
+      toggleClear();
+    }
+
+    function go() {
+      const q = input.value.trim().toLowerCase();
+      if (!q) return;
+      const t = DRAMAS.find(d => d.title.toLowerCase() === q) || DRAMAS.find(d => d.title.toLowerCase().includes(q));
+      if (t) window.location.href = t.url;
+    }
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    if (submitBtn) submitBtn.addEventListener('click', go);
+  }
+
+  /* ── custom selects ── */
+  document.querySelectorAll('.selectors select').forEach(select => {
+    const options = Array.from(select.options);
+    const wrapper = document.createElement('div');
+    wrapper.className = 'custom-select-wrapper';
+
+    const trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'custom-select-trigger';
+
+    const label = document.createElement('span');
+    label.textContent = options[0].text;
+    const arrow = document.createElement('span');
+    arrow.className = 'custom-select-arrow';
+    arrow.textContent = '▾';
+    trigger.appendChild(label);
+    trigger.appendChild(arrow);
+
+    const dropdown = document.createElement('ul');
+    dropdown.className = 'custom-select-dropdown';
+
+    options.forEach((opt, idx) => {
+      const li = document.createElement('li');
+      li.textContent = opt.text;
+      li.addEventListener('mousedown', () => {
+        select.selectedIndex = idx;
+        label.textContent = opt.text;
+        close();
+      });
+      dropdown.appendChild(li);
+    });
+
+    function open()  { dropdown.style.display = 'block'; trigger.style.borderRadius = '10px 10px 0 0'; trigger.style.borderBottom = '1px solid transparent'; }
+    function close() { dropdown.style.display = 'none';  trigger.style.borderRadius = '10px'; trigger.style.borderBottom = ''; }
+
+    trigger.addEventListener('click', () => dropdown.style.display === 'none' ? open() : close());
+    document.addEventListener('mousedown', e => { if (!wrapper.contains(e.target)) close(); });
+
+    select.style.display = 'none';
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(dropdown);
+    select.parentNode.insertBefore(wrapper, select);
+    wrapper.appendChild(select);
+  });
+
+  /* ── stars ── */
+  (function () {
+    const container = document.getElementById('stars');
+    const stars = Array.from(container.querySelectorAll('span'));
+    let current = 0;
+
+    function update(hoverVal) {
+      stars.forEach(s => {
+        const v = +s.dataset.v;
+        s.textContent = (hoverVal ? v <= hoverVal : v <= current) ? '★' : '☆';
+        s.classList.toggle('active', v <= current);
+        s.classList.toggle('hover', hoverVal ? v <= hoverVal : false);
+      });
+    }
+
+    stars.forEach(s => {
+      s.addEventListener('mouseenter', () => update(+s.dataset.v));
+      s.addEventListener('mouseleave', () => update(0));
+      s.addEventListener('click', () => {
+        current = +s.dataset.v;
+        update(0);
+      });
+    });
+
+    update(0);
+  })();
+  </script>
+</body>
+</html>

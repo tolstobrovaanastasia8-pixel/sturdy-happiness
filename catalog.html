@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+    :root {
+      --page-width: 872px;
+      --stage-width: 100%;
+      --stage-height: 1909px;
+      --side-width: 320px;
+      --surface: #1a0b17;
+      --surface-dark: #150412;
+      --surface-card: #230b1e;
+      --surface-card-soft: #2a1026;
+      --line: #342425;
+      --text: #ffffff;
+      --muted: #bdaeb4;
+      --accent: #ed6c7b;
+      --accent-strong: #bd2c43;
+      --gold: #deb673;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-width: var(--stage-width);
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background: var(--surface-dark);
+      color: var(--text);
+      font-family: "Inter", "Inter-Bold", Arial, sans-serif;
+      font-size: 14px;
+      letter-spacing: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .stage {
+      position: relative;
+      width: var(--stage-width);
+      min-height: var(--stage-height);
+      margin: 0 auto;
+      background:
+        linear-gradient(90deg, transparent 0 var(--side-width), rgba(21, 4, 18, 0.98) var(--side-width) calc(100% - var(--side-width)), transparent calc(100% - var(--side-width))),
+        var(--surface-dark);
+      overflow: hidden;
+    }
+
+    .stage::before,
+    .stage::after {
+      content: "";
+      position: absolute;
+      left: var(--side-width);
+      width: calc(100% - var(--side-width) * 2);
+      height: 1px;
+      background: rgba(63, 45, 47, 0.65);
+      z-index: 1;
+    }
+
+    .stage::before {
+      top: 0;
+    }
+
+    .stage::after {
+      bottom: 0;
+    }
+
+    .side-panel {
+      position: absolute;
+      top: 0;
+      width: var(--side-width);
+      height: 100%;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #632428 0%, #160e28 100%);
+      z-index: 0;
+    }
+
+    .side-panel-left {
+      left: 0;
+    }
+
+    .side-panel-right {
+      right: 0;
+    }
+
+    .lantern-field {
+      position: absolute;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: var(--page-width);
+      margin: 0 auto;
+      padding: 12px 0;
+    }
+
+    .site-header,
+    .content-wrap,
+    .site-footer,
+    .filters,
+    .catalog-panel,
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #1A0B17;
+    }
+
+    .site-header {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      height: 102px;
+      overflow: hidden;
+    }
+
+    .logo-link {
+      display: grid;
+      place-items: center;
+      border-right: 1px solid var(--line);
+    }
+
+    .logo {
+      width: 84px;
+      height: 84px;
+      display: block;
+      border-radius: 50%;
+    }
+
+    .header-content {
+      padding: 9px 10px 0;
+    }
+
+    .search-form {
+      display: grid;
+      grid-template-columns: 1fr 138px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-input-wrap {
+      position: relative;
+    }
+
+    .search-input-wrap input {
+      padding-right: 38px;
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 10px;
+      top: 45%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: #b68f98;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      place-items: center;
+      padding: 0;
+    }
+
+    .search-form input {
+      height: 32px;
+      border-radius: 10px;
+    }
+
+    .search-submit-btn {
+      height: 32px;
+      border-radius: 10px;
+    }
+
+    .search-form input {
+      width: 100%;
+      border: 1px solid #9b6973;
+      background: transparent;
+      color: var(--text);
+      outline: none;
+      padding: 0 12px;
+    }
+
+    .search-form input::placeholder {
+      color: #807078;
+    }
+
+    .search-submit-btn {
+      border: 1px solid #923044;
+      background: #40121e;
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .search-submit-btn {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+
+    .search-submit-btn:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(146, 48, 68, 0.45);
+      transform: translateZ(0) scale(1.03);
+    }
+
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: 31px;
+      margin-top: 15px;
+      color: #c8b5bd;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .main-nav a:hover {
+      color: var(--text);
+      background: rgba(62, 37, 36, 0.7);
+    }
+
+    .main-nav a {
+      display: inline-grid;
+      place-items: center;
+      min-width: 86px;
+      height: 34px;
+      border-radius: 20px;
+      padding: 0 12px;
+    }
+
+    .main-nav .active {
+      color: var(--text);
+      background: rgba(62, 37, 36, 0.7);
+    }
+
+    .content-wrap {
+      margin-top: 11px;
+      padding: 14px;
+    }
+
+    .catalog-layout {
+      display: grid;
+      grid-template-columns: 238px 1fr;
+      gap: 16px;
+    }
+
+    .filters {
+      padding: 14px;
+      height: fit-content;
+      background: #1A0B17;
+    }
+
+    .filters h2 {
+      margin: 0 0 14px;
+      font-size: 16px;
+    }
+
+    .filters label {
+      font-size: 13px;
+      display: block;
+      margin: 10px 0 6px;
+      color: #ae9faa;
+    }
+
+    .filters input,
+    .filters select,
+    .filters button {
+      width: 100%;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #291325;
+      color: #fff;
+      padding: 0 10px;
+    }
+
+    .filters .btn-main {
+      margin-top: 14px;
+      background: var(--accent-strong);
+      border-color: #bd2b42;
+      font-weight: 700;
+      transition: transform 0.2s;
+    }
+
+    .filters .btn-secondary {
+      margin-top: 10px;
+      background: #2a1026;
+      font-weight: 700;
+      transition: transform 0.2s;
+    }
+
+    .filters .btn-main {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+
+    .filters .btn-main:hover {
+      filter: brightness(1.15);
+      box-shadow: 0 0 0 2px rgba(189, 43, 66, 0.45);
+      transform: translateZ(0) scale(1.03);
+    }
+
+    .filters .btn-secondary {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+
+    .filters .btn-secondary:hover {
+      margin-top: 10px;
+      background: #ffffff;
+      border: 1px solid #631F25;
+      border-radius: 10px;
+      background-image: url(image/cubs.png);
+      background-size: 80px;
+      background-repeat: no-repeat;
+      background-position: center;
+      color: transparent;
+      box-shadow: 0 0 0 2px rgba(99, 31, 37, 0.35);
+      transform: translateZ(0) scale(1.03);
+    }
+
+    .catalog-panel {
+      padding: 14px;
+      height: fit-content;
+      background: #1A0B17;
+    }
+
+    .section-label {
+      margin: 2px 0 8px;
+      color: var(--accent);
+      font-weight: 800;
+      text-transform: lowercase;
+    }
+
+    .catalog-panel h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .catalog-panel .desc {
+      margin: 8px 0 14px;
+      color: var(--muted);
+    }
+
+    .card {
+      background: #210F1E;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .poster {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      border-radius: 10px 10px 0 0;
+    }
+
+    .card-copy {
+      position: relative;
+      height: 107px;
+      padding: 6px 8px 8px;
+    }
+
+    .card-copy h3 {
+      margin: 0 0 4px;
+      min-height: 14px;
+      font-size: 11px;
+      line-height: 1.1;
+      font-weight: 500;
+    }
+
+    .card-copy p,
+    .country {
+      color: var(--muted);
+      font-size: 9px;
+      line-height: 1.2;
+    }
+
+    .card-copy p {
+      margin-top: 1.5px;
+    }
+
+    .episode-badge {
+      position: absolute;
+      left: 8px;
+      top: 43px;
+      height: 12px;
+      min-width: 51px;
+      padding: 0 7px;
+      border: 1px solid var(--gold);
+      border-radius: 20px;
+      color: var(--gold);
+      font-size: 9px;
+      line-height: 10px;
+      background: #3C282B;
+    }
+
+    .country {
+      position: absolute;
+      right: 11px;
+      top: 43px;
+    }
+
+    .details-link {
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      display: grid;
+      place-items: center;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface-card-soft);
+      font-size: 12px;
+      font-weight: 800;
+      transition: filter 0.2s, box-shadow 0.2s;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+
+    .details-link:hover {
+      filter: brightness(1.2);
+      box-shadow: 0 0 0 1px rgba(52, 36, 37, 0.8);
+      transform: translateZ(0) scale(1.03);
+    }
+
+    .site-footer {
+      height: 158px;
+      margin-top: 13px;
+      padding: 16px 21px;
+    }
+
+    .site-footer h2 {
+      margin-top: 0;
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .site-footer address {
+      margin: -15px 0 0;
+      color: var(--muted);
+      font-style: normal;
+      font-size: 14px;
+      line-height: 1.18;
+    }
+
+    .site-footer p {
+      margin: 13px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage">
+    <aside class="side-panel side-panel-left" aria-hidden="true"></aside>
+    <aside class="side-panel side-panel-right" aria-hidden="true"></aside>
+
+    <div class="lantern-field" aria-hidden="true">
+      <img class="light-1-icon" alt="" src="image/light.png" />
+    </div>
+
+    <main class="page">
+      <header class="site-header">
+        <a class="logo-link" href="index.html"><img class="logo" src="image/logo.png" alt="Doramaflix" /></a>
+        <div class="header-content">
+          <form class="search-form">
+            <div class="search-input-wrap">
+              <input placeholder="Найти дораму, жанр или студию" autocomplete="off" />
+              <button type="button" class="search-clear-btn" aria-label="Очистить поиск">×</button>
+            </div>
+            <button type="button" class="search-submit-btn">Найти</button>
+          </form>
+          <nav class="main-nav">
+            <a href="index.html">Главная</a>
+            <a class="active" href="index1.html">Каталог</a>
+            <a href="subcribe.html">Подписка</a>
+            <a href="cabinet.html">Личный кабинет</a>
+          </nav>
+        </div>
+      </header>
+
+      <section class="content-wrap">
+        <div class="catalog-layout">
+          <aside class="filters">
+            <h2>Фильтры каталога</h2>
+            <label>Поиск</label><input placeholder="Название" />
+            <label>Жанр</label><select>
+              <option>Все жанры</option>
+              <option>Детектив</option>
+              <option>Триллер</option>
+              <option>Криминал</option>
+              <option>Мелодрама</option>
+              <option>Повседневность</option>
+              <option>Романтика</option>
+              <option>Комедия</option>
+              <option>Драма</option>
+              <option>Приключение</option>
+              <option>Фэнтази</option>
+              <option>Боевик</option>
+            </select>
+            <label>Год</label><select>
+              <option>Все годы</option>
+              <option>2016</option>
+              <option>2018</option>
+              <option>2019</option>
+              <option>2020</option>
+              <option>2021</option>
+              <option>2022</option>
+              <option>2025</option>
+              <option>2026</option>
+            </select>
+            <label>Страна</label><select>
+              <option>Все страны</option>
+              <option>Китай</option>
+              <option>Таиланд</option>
+              <option>Япония</option>
+              <option>Корея</option>
+            </select>
+            <label>Статус</label><select>
+              <option>Любой</option>
+              <option>Онгоинг</option>
+              <option>Завершен</option>
+            </select>
+            <label>Тип контента</label><select>
+              <option>Все</option>
+              <option>Дорама</option>
+              <option>Лакорн</option>
+            </select>
+            <label>Озвучка</label><select>
+              <option>Любая</option>
+              <option>Русская</option>
+              <option>Субтитры</option>
+            </select>
+            <label>Сортировка</label><select>
+              <option>По популярности</option>
+              <option>От А до Я</option>
+              <option>Высокий рейтинг</option>
+              <option>Низкий рейтинг</option>
+            </select>
+            <button class="btn-main">Найти</button>
+            <button class="btn-secondary">Случайная дорама</button>
+          </aside>
+
+          <div class="catalog-panel">
+            <p class="section-label">каталог</p>
+            <h1>Все дорамы</h1>
+            <p class="desc">Каталог доступен всем пользователям. Полный плеер серий — по подписке Premium.</p>
+            <div class="grid">
+              <article class="card">
+                <div class="poster-frame"><img src="image/nine-puzzles.png" alt="Девять пазлов"
+                    class="poster image-position-top"></div>
+                <div class="card-copy">
+                  <h3>Девять пазлов</h3>
+                  <p>2025 • Детектив, триллер</p><span class="episode-badge">11 серий</span><span
+                    class="country">Корея</span><a class="details-link" href="nine-puzzles.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/love-O2O.png" alt="Легкая улыбка покоряет мир"
+                    class="poster image-position-high"></div>
+                <div class="card-copy">
+                  <h3>Легкая улыбка покоряет мир</h3>
+                  <p>2016 • Драма, романтика</p><span class="episode-badge">30 серий</span><span
+                    class="country">Китай</span><a class="details-link" href="love-O2O.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/manner-of-death.png" alt="Обстоятельства смерти"
+                    class="poster image-position-sky"></div>
+                <div class="card-copy">
+                  <h3>Обстоятельства смерти</h3>
+                  <p>2020 • Криминал, мелодрама</p><span class="episode-badge">14 серий</span><span
+                    class="country">Таиланд</span><a class="details-link" href="manner-of-death.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/true-beauty.png" alt="Истинная красота"
+                    class="poster image-position-top"></div>
+                <div class="card-copy">
+                  <h3>Истинная красота</h3>
+                  <p>2020 • Романтика, драма</p><span class="episode-badge">16 серий</span><span
+                    class="country">Корея</span><a class="details-link" href="true-beauty.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/minato's-laundromat.png" alt="Прачечная Минато"
+                    class="poster image-position-high"></div>
+                <div class="card-copy">
+                  <h3>Прачечная Минато</h3>
+                  <p>2022 • Драма, повседневность</p><span class="episode-badge">24 серии</span><span
+                    class="country">Япония</span><a class="details-link" href="minato's-laundromat.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/word-of-honor.png" alt="Далекие странники"
+                    class="poster image-position-sky"></div>
+                <div class="card-copy">
+                  <h3>Далекие странники</h3>
+                  <p>2021 • Боевик, приключение</p><span class="episode-badge">36 серий</span><span
+                    class="country">Китай</span><a class="details-link" href="word-of-honor.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/my-romance-scammer.png" alt="Моя романтическая афера"
+                    class="poster image-position-top"></div>
+                <div class="card-copy">
+                  <h3>Моя романтическая афера</h3>
+                  <p>2026 • Комедия, романтика</p><span class="episode-badge">12 серий</span><span
+                    class="country">Таиланд</span><a class="details-link" href="my-romance-scammer.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/crash-landing-on-you.png" alt="Любовь приходит с неба"
+                    class="poster image-position-high"></div>
+                <div class="card-copy">
+                  <h3>Любовь приходит с неба</h3>
+                  <p>2019 • Романтика, комедия</p><span class="episode-badge">16 серий</span><span
+                    class="country">Корея</span><a class="details-link" href="crash-landing-on-you.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/countdown-to-yes.png" alt="Отсчёт до Да"
+                    class="poster image-position-sky"></div>
+                <div class="card-copy">
+                  <h3>Отсчёт до Да</h3>
+                  <p>2026 • Драма, романтика</p><span class="episode-badge">11 серий</span><span
+                    class="country">Япония</span><a class="details-link" href="countdown-to-yes.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/the-untamed.png" alt="Неукротимый"
+                    class="poster image-position-top"></div>
+                <div class="card-copy">
+                  <h3>Неукротимый</h3>
+                  <p>2019 • Боевик, драма</p><span class="episode-badge">50 серий</span><span
+                    class="country">Китай</span><a class="details-link" href="the-untamed.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/a-tale-of-1000-stars.png" alt="Сказка о 1000 звёзд"
+                    class="poster image-position-high"></div>
+                <div class="card-copy">
+                  <h3>Сказка о 1000 звёзд</h3>
+                  <p>2021 • Драма, боевик</p><span class="episode-badge">10 серий</span><span
+                    class="country">Таиланд</span><a class="details-link" href="a-tale-of-1000-stars.html">Подробнее</a>
+                </div>
+              </article>
+              <article class="card">
+                <div class="poster-frame"><img src="image/cherry-magic.png" alt="Оказывается, можно..."
+                    class="poster image-position-sky"></div>
+                <div class="card-copy">
+                  <h3>Оказывается, можно...</h3>
+                  <p>2020 • Мелодрама, фэнтази</p><span class="episode-badge">12 серий</span><span
+                    class="country">Япония</span><a class="details-link" href="cherry-magic.html">Подробнее</a>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <h2>Контакты</h2>
+        <address>ИП Толстоброва А.А.<br>Иркутск, ул. Красноярская, д. 37, оф. 2<br>Телефон: (6767) 11-03-77<br>E-mail:
+          Doramaflix@mail.ru</address>
+        <p>© 2026 Doramaflix.ru. Все права защищены.</p>
+      </footer>
+    </main>
+  </div>
+  <script>
+    const DRAMAS = [
+      { title: "Девять пазлов", url: "nine-puzzles.html", img: "image/nine-puzzles.png", imgPos: "image-position-top", year: 2025, genres: ["Детектив", "Триллер"], genreLabel: "Детектив, триллер", episodes: "11 серий", country: "Корея", status: "Онгоинг", type: "Дорама", dub: "Субтитры", rating: 8.4, popularity: 8 },
+      { title: "Легкая улыбка покоряет мир", url: "love-O2O.html", img: "image/love-O2O.png", imgPos: "image-position-high", year: 2016, genres: ["Драма", "Романтика"], genreLabel: "Драма, романтика", episodes: "30 серий", country: "Китай", status: "Завершен", type: "Дорама", dub: "Русская", rating: 8.7, popularity: 5 },
+      { title: "Обстоятельства смерти", url: "manner-of-death.html", img: "image/manner-of-death.png", imgPos: "image-position-sky", year: 2020, genres: ["Криминал", "Мелодрама"], genreLabel: "Криминал, мелодрама", episodes: "14 серий", country: "Таиланд", status: "Завершен", type: "Лакорн", dub: "Субтитры", rating: 8.5, popularity: 7 },
+      { title: "Истинная красота", url: "true-beauty.html", img: "image/true-beauty.png", imgPos: "image-position-top", year: 2020, genres: ["Романтика", "Драма"], genreLabel: "Романтика, драма", episodes: "16 серий", country: "Корея", status: "Завершен", type: "Дорама", dub: "Русская", rating: 8.8, popularity: 4 },
+      { title: "Прачечная Минато", url: "minato's-laundromat.html", img: "image/minato's-laundromat.png", imgPos: "image-position-high", year: 2022, genres: ["Драма", "Повседневность"], genreLabel: "Драма, повседневность", episodes: "24 серии", country: "Япония", status: "Завершен", type: "Дорама", dub: "Субтитры", rating: 8.3, popularity: 9 },
+      { title: "Далекие странники", url: "word-of-honor.html", img: "image/word-of-honor.png", imgPos: "image-position-sky", year: 2021, genres: ["Боевик", "Приключение"], genreLabel: "Боевик, приключение", episodes: "36 серий", country: "Китай", status: "Завершен", type: "Дорама", dub: "Субтитры", rating: 8.6, popularity: 6 },
+      { title: "Моя романтическая афера", url: "my-romance-scammer.html", img: "image/my-romance-scammer.png", imgPos: "image-position-top", year: 2026, genres: ["Комедия", "Романтика"], genreLabel: "Комедия, романтика", episodes: "12 серий", country: "Таиланд", status: "Онгоинг", type: "Лакорн", dub: "Субтитры", rating: 7.9, popularity: 12 },
+      { title: "Любовь приходит с неба", url: "crash-landing-on-you.html", img: "image/crash-landing-on-you.png", imgPos: "image-position-high", year: 2019, genres: ["Романтика", "Комедия"], genreLabel: "Романтика, комедия", episodes: "16 серий", country: "Корея", status: "Завершен", type: "Дорама", dub: "Русская", rating: 9.5, popularity: 1 },
+      { title: "Отсчёт до Да", url: "countdown-to-yes.html", img: "image/countdown-to-yes.png", imgPos: "image-position-sky", year: 2026, genres: ["Драма", "Романтика"], genreLabel: "Драма, романтика", episodes: "11 серий", country: "Япония", status: "Онгоинг", type: "Дорама", dub: "Субтитры", rating: 8.0, popularity: 11 },
+      { title: "Неукротимый", url: "the-untamed.html", img: "image/the-untamed.png", imgPos: "image-position-top", year: 2019, genres: ["Боевик", "Драма"], genreLabel: "Боевик, драма", episodes: "50 серий", country: "Китай", status: "Завершен", type: "Дорама", dub: "Русская", rating: 9.2, popularity: 2 },
+      { title: "Сказка о 1000 звёзд", url: "a-tale-of-1000-stars.html", img: "image/a-tale-of-1000-stars.png", imgPos: "image-position-high", year: 2021, genres: ["Драма", "Боевик"], genreLabel: "Драма, боевик", episodes: "10 серий", country: "Таиланд", status: "Завершен", type: "Лакорн", dub: "Субтитры", rating: 9.0, popularity: 3 },
+      { title: "Оказывается, можно...", url: "cherry-magic.html", img: "image/cherry-magic.png", imgPos: "image-position-sky", year: 2020, genres: ["Мелодрама", "Фэнтази"], genreLabel: "Мелодрама, фэнтази", episodes: "12 серий", country: "Япония", status: "Завершен", type: "Дорама", dub: "Субтитры", rating: 8.2, popularity: 10 },
+    ];
+
+    const grid = document.querySelector('.grid');
+    const selects = document.querySelectorAll('.filters select');
+    const filterInput = document.querySelector('.filters input');
+    const findBtn = document.querySelector('.btn-main');
+    const randomBtn = document.querySelector('.btn-secondary');
+    const sortSelect = selects[6];
+
+    function renderGrid(list) {
+      if (!list.length) {
+        grid.innerHTML = '<p style="color:var(--muted);grid-column:1/-1;padding:20px 0">Ничего не найдено по выбранным критериям</p>';
+        return;
+      }
+      grid.innerHTML = list.map(d => `
+    <article class="card">
+      <div class="poster-frame">
+        <img src="${d.img}" alt="${d.title}" class="poster ${d.imgPos}">
+      </div>
+      <div class="card-copy">
+        <h3>${d.title}</h3>
+        <p>${d.year} • ${d.genreLabel}</p>
+        <span class="episode-badge">${d.episodes}</span>
+        <span class="country">${d.country}</span>
+        <a class="details-link" href="${d.url}">Подробнее</a>
+      </div>
+    </article>
+  `).join('');
+    }
+
+    function applyFilters() {
+      const q = filterInput.value.trim().toLowerCase();
+      const genre = selects[0].value;
+      const year = selects[1].value;
+      const country = selects[2].value;
+      const status = selects[3].value;
+      const type = selects[4].value;
+      const dub = selects[5].value;
+      const sort = selects[6].value;
+
+      let result = DRAMAS.filter(d => {
+        if (q && !d.title.toLowerCase().includes(q)) return false;
+        if (genre !== "Все жанры" && !d.genres.includes(genre)) return false;
+        if (year !== "Все годы" && d.year !== +year) return false;
+        if (country !== "Все страны" && d.country !== country) return false;
+        if (status !== "Любой" && d.status !== status) return false;
+        if (type !== "Все" && d.type !== type) return false;
+        if (dub !== "Любая" && d.dub !== dub) return false;
+        return true;
+      });
+
+      if (sort === "От А до Я") result.sort((a, b) => a.title.localeCompare(b.title, 'ru'));
+      else if (sort === "Высокий рейтинг") result.sort((a, b) => b.rating - a.rating);
+      else if (sort === "Низкий рейтинг") result.sort((a, b) => a.rating - b.rating);
+      renderGrid(result);
+    }
+
+    findBtn.addEventListener('click', applyFilters);
+    filterInput.addEventListener('keydown', e => { if (e.key === 'Enter') applyFilters(); });
+
+    randomBtn.addEventListener('click', () => {
+      window.location.href = DRAMAS[Math.floor(Math.random() * DRAMAS.length)].url;
+    });
+
+    setupSearch(
+      document.querySelector('.search-form input'),
+      document.querySelector('.search-form > button'),
+      document.querySelector('.search-clear-btn')
+    );
+
+    function setupSearch(input, submitBtn, clearBtn) {
+      const dropdown = document.createElement('ul');
+      dropdown.style.cssText = `
+    position:fixed; z-index:9999;
+    list-style:none; margin:0; padding:4px 0;
+    background:#1e0d1b; border:1px solid #9b6973;
+    border-top:none; border-radius:0 0 10px 10px;
+    display:none; box-shadow:0 8px 20px rgba(0,0,0,0.6);
+  `;
+      document.body.appendChild(dropdown);
+
+      function toggleClearButton() {
+        if (!clearBtn) return;
+        clearBtn.style.display = input.value.trim() ? "grid" : "none";
+      }
+
+      function positionDropdown() {
+        const r = input.getBoundingClientRect();
+        dropdown.style.top = r.bottom + 'px';
+        dropdown.style.left = r.left + 'px';
+        dropdown.style.width = r.width + 'px';
+      }
+
+      function openDropdown() {
+        input.style.borderRadius = '10px 10px 0 0';
+        input.style.borderBottom = '1px solid transparent';
+      }
+
+      function closeDropdown() {
+        dropdown.style.display = 'none';
+        input.style.borderRadius = '10px';
+        input.style.borderBottom = '';
+      }
+
+      function renderDropdown(query) {
+        const q = query.trim().toLowerCase();
+        dropdown.innerHTML = '';
+        if (!q) { closeDropdown(); return; }
+        const matches = DRAMAS.filter(d => d.title.toLowerCase().includes(q));
+        if (!matches.length) { closeDropdown(); return; }
+        matches.forEach(d => {
+          const li = document.createElement('li');
+          li.textContent = d.title;
+          li.style.cssText = 'padding:9px 12px;font-size:13px;cursor:pointer;color:#fff;transition:background 0.15s;';
+          li.addEventListener('mouseenter', () => li.style.background = 'rgba(62,37,36,0.8)');
+          li.addEventListener('mouseleave', () => li.style.background = 'transparent');
+          li.addEventListener('mousedown', () => {
+            input.value = d.title; toggleClearButton(); closeDropdown();
+          });
+          dropdown.appendChild(li);
+        });
+        positionDropdown();
+        openDropdown();
+        dropdown.style.display = 'block';
+      }
+
+      input.addEventListener('input', () => { renderDropdown(input.value); toggleClearButton(); });
+      input.addEventListener('focus', () => renderDropdown(input.value));
+      input.addEventListener('blur', () => setTimeout(closeDropdown, 150));
+
+      window.addEventListener('scroll', () => { if (dropdown.style.display !== 'none') positionDropdown(); });
+      window.addEventListener('resize', () => { if (dropdown.style.display !== 'none') positionDropdown(); });
+
+      if (clearBtn) {
+        clearBtn.addEventListener('mousedown', e => {
+          e.preventDefault();
+          input.value = '';
+          toggleClearButton();
+          closeDropdown();
+          input.focus();
+        });
+        toggleClearButton();
+      }
+
+      if (submitBtn) {
+        input.addEventListener('keydown', e => {
+          if (e.key !== 'Enter') return;
+          const q = input.value.trim().toLowerCase();
+          if (!q) return;
+          const target = DRAMAS.find(d => d.title.toLowerCase() === q) || DRAMAS.find(d => d.title.toLowerCase().includes(q));
+          if (target) window.location.href = target.url;
+        });
+        submitBtn.addEventListener('click', () => {
+          const q = input.value.trim().toLowerCase();
+          if (!q) return;
+          const target = DRAMAS.find(d => d.title.toLowerCase() === q) || DRAMAS.find(d => d.title.toLowerCase().includes(q));
+          if (target) window.location.href = target.url;
+        });
+      }
+    }
+    function initCustomSelects() {
+      document.querySelectorAll('.filters select').forEach((select, i) => {
+        const options = Array.from(select.options);
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'position:relative; width:100%;';
+
+        const trigger = document.createElement('button');
+        trigger.type = 'button';
+        trigger.textContent = options[0].text;
+        trigger.style.cssText = `
+      width:100%; height:34px; border-radius:10px;
+      border:1px solid var(--line); background:#291325;
+      color:#fff; padding:0 32px 0 10px; text-align:left;
+      font-size:14px; cursor:pointer; position:relative;
+      transition: border-radius 0.15s;
+    `;
+
+        const arrow = document.createElement('span');
+        arrow.textContent = '▾';
+        arrow.style.cssText = 'position:absolute; right:10px; top:50%; transform:translateY(-50%); pointer-events:none; color:var(--muted); font-size:12px;';
+        trigger.appendChild(arrow);
+
+        const dropdown = document.createElement('ul');
+        dropdown.style.cssText = `
+      position:absolute; z-index:9999; top:100%;
+      left:0; right:0; margin:0; padding:4px 0;
+      list-style:none; background:#24101F; 
+      border:1px solid var(--line); border-top:none;
+      border-radius:0 0 10px 10px;
+      display:none; 
+      max-height:200px; overflow-y:auto;
+    `;
+
+        options.forEach((opt, idx) => {
+          const li = document.createElement('li');
+          li.textContent = opt.text;
+          li.style.cssText = 'padding:9px 12px; font-size:13px; cursor:pointer; color:#fff; transition:background 0.15s;';
+          li.addEventListener('mouseenter', () => li.style.background = 'rgba(62,37,36,0.8)');
+          li.addEventListener('mouseleave', () => li.style.background = 'transparent');
+          li.addEventListener('mousedown', () => {
+            select.selectedIndex = idx;
+            trigger.childNodes[0].textContent = opt.text;
+            closeDropdown();
+          });
+          dropdown.appendChild(li);
+        });
+
+        function openDropdown() {
+          dropdown.style.display = 'block';
+          trigger.style.borderRadius = '10px 10px 0 0';
+          trigger.style.borderBottom = '1px solid transparent';
+        }
+        function closeDropdown() {
+          dropdown.style.display = 'none';
+          trigger.style.borderRadius = '10px';
+          trigger.style.borderBottom = '';
+        }
+
+        trigger.addEventListener('click', () => {
+          dropdown.style.display === 'none' ? openDropdown() : closeDropdown();
+        });
+
+        document.addEventListener('mousedown', e => {
+          if (!wrapper.contains(e.target)) closeDropdown();
+        });
+
+        select.style.display = 'none';
+        wrapper.appendChild(trigger);
+        wrapper.appendChild(dropdown);
+        select.parentNode.insertBefore(wrapper, select);
+        wrapper.appendChild(select);
+      });
+    }
+
+    initCustomSelects();
+    window.addEventListener('pageshow', () => {
+      filterInput.value = '';
+      if (sortSelect) sortSelect.selectedIndex = 0;
+      document.querySelectorAll('.filters select').forEach((select, idx) => {
+        if (idx !== 6) return;
+        const trigger = select.parentElement.querySelector('button');
+        if (trigger) trigger.childNodes[0].textContent = select.options[0].text;
+      });
+      const headerInput = document.querySelector('.search-form input');
+      const clearBtn = document.querySelector('.search-clear-btn');
+      if (headerInput) headerInput.value = '';
+      if (clearBtn) clearBtn.style.display = 'none';
+      applyFilters();
+    });
+  </script>
+</body>
+
+</html>
